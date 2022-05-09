@@ -4,6 +4,6 @@ export default function Home() {
     const { socket } = useSockets()
 
     return (
-        <div>Socket id: {socket.id}</div>
+        <div>Socket id: <> {socket.id}</></div>
     )
 }
