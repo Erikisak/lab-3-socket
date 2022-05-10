@@ -16,30 +16,30 @@ const EVENTS = {
 const rooms: Record<string, { name: string }> = {};
 
 //io is Server
-function socket(io: Server){
+function socket(io: Server) {
     logger.info(`Sockets enabled`)
 
     io.on(EVENTS.connection, (socket: Socket) => {
         logger.info(`User connected ${socket.id}`);
 
-    socket.on(EVENTS.CLIENT.CREATE_ROOM, ({roomName}) => {
-        console.log({ roomName });
-        
-        const roomId = nanoid()
-        
-        rooms[roomId] = {
-            name: roomName,
-          };
+        socket.on(EVENTS.CLIENT.CREATE_ROOM, (roomName: string) => {
+            console.log({ roomName });
 
-        socket.join(roomId);
+            const roomId = nanoid()
 
-        socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
+            rooms[roomId] = {
+                name: roomName,
+            };
 
-        socket.emit(EVENTS.SERVER.ROOMS, rooms);
-        
-        socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
-    })
-        
+            socket.join(roomId);
+
+            socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
+
+            socket.emit(EVENTS.SERVER.ROOMS, rooms);
+
+            socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
+        })
+
     });
 }
 
