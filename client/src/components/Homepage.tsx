@@ -11,6 +11,7 @@ export default function Homepage() {
         e.preventDefault()
         //save nickname
         setNickname(inputValue)
+        localStorage.setItem('nickname', inputValue)
     }
 
     return (

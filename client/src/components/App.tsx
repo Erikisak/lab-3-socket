@@ -14,9 +14,10 @@ export default function App() {
     <Box>
       <Navbar />
       {nickname ?
-        <><Rooms /></> :
+        <Rooms /> :
         <Homepage />
       }
+      {/* Do the same thing but for rooms, if a room is joined render chat instead */}
     </Box>
 
   );

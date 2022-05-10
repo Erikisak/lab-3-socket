@@ -1,6 +1,5 @@
 import { Server, Socket } from "socket.io"
 import logger from "./utils/logger"
-import { nanoid } from "nanoid";
 
 const EVENTS = {
     connection: "connection",
@@ -25,21 +24,14 @@ function socket(io: Server) {
         socket.on(EVENTS.CLIENT.CREATE_ROOM, (roomName: string) => {
             console.log({ roomName });
 
-            const roomId = nanoid()
-
-            rooms[roomId] = {
-                name: roomName,
-            };
-
-            socket.join(roomId);
-
+/*             socket.join(roomId);
+ */
             socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
 
             socket.emit(EVENTS.SERVER.ROOMS, rooms);
 
-            socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
-        })
-
+/*             socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
+ */        })
     });
 }
 
