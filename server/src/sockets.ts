@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io"
-import logger from "./utils/logger"
+import {log} from "./utils/formating"
 
 const EVENTS = {
     connection: "connection",
@@ -16,10 +16,10 @@ const rooms: Record<string, { name: string }> = {};
 
 //io is Server
 function socket(io: Server) {
-    logger.info(`Sockets enabled`)
+    log.info(`Sockets enabled`)
 
     io.on(EVENTS.connection, (socket: Socket) => {
-        logger.info(`User connected ${socket.id}`);
+        log.info(`User connected ${socket.id}`);
 
         socket.on(EVENTS.CLIENT.CREATE_ROOM, (roomName: string) => {
             console.log({ roomName });
