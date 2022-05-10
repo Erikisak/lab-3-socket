@@ -2,8 +2,8 @@
 const users:any [] = [];
 
 //join user to chat
-export function userJoin(id: string, username: string, room: string) {
-    const user = {id, username, room};
+export function userJoin(id: string, nickname: string, roomName: string) {
+    const user = {id, nickname, roomName};
 
     users.push(user);
 

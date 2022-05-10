@@ -1,7 +1,19 @@
 import { Box, Button, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
 
 
-function Chat() {
+export default function Chat() {
+
+/*       //output message to dom, do this in chat i guess
+      function outputMessage(message) {
+        const div = document.createElement('div')
+        div.classList.add('message')
+        div.innerHTML = `
+    <p class="meta">${message.username} <span>${message.time}</span></p>
+    <p class="text">
+        ${message.text}
+    </p>`;
+        document.querySelector('.chat-messages').appendChild(div);
+    } */
 
   return (
     <Paper sx={paperStyle}>
@@ -65,5 +77,3 @@ const roomStyle2: SxProps = {
   marginRight: '1rem',
   float: 'right'
 }
-
-export default Chat;
