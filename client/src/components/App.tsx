@@ -14,7 +14,7 @@ export default function App() {
     <Box>
       <Navbar />
       {nickname ?
-        <><Rooms /><Chat /></> :
+        <><Rooms /></> :
         <Homepage />
       }
     </Box>

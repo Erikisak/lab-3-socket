@@ -8,8 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Link from '@mui/material/Link';
 import { useSockets } from "../context/socket.context";
 import EVENTS from "../config/events"
-
-
+import '../style.css'
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -69,6 +68,14 @@ const Rooms: React.FC = () => {
 
         setNewRoom('')
     }
+
+    function handleJoinRoom(key: string | undefined) {
+        if (key === roomId) return;
+    
+        socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
+      
+      }
+    
     
 
     
@@ -78,7 +85,11 @@ const Rooms: React.FC = () => {
         <Grid>
             <Button
             onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }), color: '#fff' }}>
+            sx={{ ...(open && { display: 'none' }), backgroundColor: '#4D774E',color: 'white',
+            '&:hover': {
+                backgroundColor: '#4caf50',
+                color: '#fff',
+            }, marginTop: '5rem' }}>
             Rooms
             </Button>
           <Typography sx={header}>
@@ -88,6 +99,7 @@ const Rooms: React.FC = () => {
         <Box textAlign={'center'}>
           <Button 
           onClick={handleDeleteDrawerOpen}
+          style={{ backgroundColor: 'transparent' }}
           >
     
           <AddCircleIcon sx={icon}/>
@@ -111,17 +123,18 @@ const Rooms: React.FC = () => {
                             Room name
                         </Typography>
                    
-                        <TextField value={roomName} sx={textfield} id="outlined-basic" label="Room name" variant="outlined"  required onChange={(e) => setNewRoom(e.target.value)}/>
+                        <TextField className="inputRounded" value={roomName} sx={textfield} id="outlined-basic" label="Room name" variant="outlined"  required onChange={(e) => setNewRoom(e.target.value)}/>
 
                     <Box sx={button}>
-                    <Link href="/Rooms" variant="body2">
-                    <Button type="submit" variant="contained" onClick={handleCreateRoom} >
+                    <Link  variant="body2" style={{textDecoration: 'none'}}>
+                    <Button sx={button2} type="submit" variant="contained" onClick={handleCreateRoom} >
                     Create
                     </Button>
                     </Link>
                     </Box>
-                  
-
+                    <Box>
+                    
+                    </Box>
                 </Drawer>
 
         <Drawer
@@ -132,7 +145,7 @@ const Rooms: React.FC = () => {
                         marginTop: '4rem',
 
                         width: { xs: drawerWidth, sm: '35%', md: '25%', lg: '21%' },
-                        height: { xs: drawerWidth, sm: '50%', md: '50%', lg: '100%' },
+                        height: { xs: drawerWidth, sm: '50%', md: '50%', lg: '80%' },
                         backgroundColor: '#9DC88D',
                        
 
@@ -153,13 +166,18 @@ const Rooms: React.FC = () => {
                 </Typography>
 
                 
-                <Paper sx={roomStyle}>
-                    <Link href="/Chat" variant="body2">
-                    <Button sx={{color: 'black'}} type="submit" >
-                        Room 1
-                        </Button>
-                        </Link>
-                </Paper>
+                
+                {Object.keys(rooms).map((key) => {
+                        return (
+                            <Paper sx={roomStyle}>
+                            <Link href="/Chat">
+                            <Button key={key}>{key}  </Button> 
+                            </Link>
+                         
+                            </Paper>
+                          );
+                        })}
+                
             
             </Drawer>
 
@@ -172,15 +190,28 @@ const Rooms: React.FC = () => {
   }
 
   const header: SxProps = {
-    color: '#fff',
+    color: '#4D774E',
     textAlign: 'center',
     fontSize: '2.5rem',
-    marginTop: '5rem'
+    marginTop: '5rem',
   }
   const icon: SxProps = {
-    color: '#fff',
+    color: '#4D774E',
     fontSize: '6rem',
-    marginTop: '5rem'
+    marginTop: '5rem',
+    '&:hover': {
+        
+        color: '#4caf50',
+    },
+  }
+  const button2: SxProps = {
+    backgroundColor: '#030b07',
+    color: 'white',
+    '&:hover': {
+        backgroundColor: '#4caf50',
+        color: '#fff',
+    },
+    
   }
   const drawerText: SxProps = {
     textAlign: 'center',
@@ -197,6 +228,7 @@ const Rooms: React.FC = () => {
     marginTop: '2rem'
 }
   const drawerText2: SxProps = {
+    color: '#fff',
     textAlign: 'center',
     fontSize: '1.5rem'
 }
@@ -208,11 +240,12 @@ const drawerStyle: SxProps = {
         marginRight: { xs: '1.5rem', sm: '8rem', lg: '20rem' },
         width: { xs: '90%', sm: '50%', md: '50%', lg: '50%' },
         height: { xs: '50%', sm: '50%', md: '40%', lg: '40%' },
-        backgroundColor: '#ECECEC',
+        backgroundColor: '#4D774E',
         borderRadius: '20px'
     }
 }
 const textfield: SxProps = {
+    
     marginTop: '4rem',
     display: 'flex',
     justifyContent: 'center',

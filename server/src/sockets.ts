@@ -36,6 +36,7 @@ function socket(io: Server){
         socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
 
         socket.emit(EVENTS.SERVER.ROOMS, rooms);
+        
         socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
     })
         
