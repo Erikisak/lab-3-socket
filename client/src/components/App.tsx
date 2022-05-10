@@ -1,27 +1,23 @@
-import SocketsProvider from "../context/socket.context"
-import Home from "./Home";
-import Layout from "./Layout";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage";
 import Rooms from "./Rooms";
 import Chat from "./Chat";
+import Navbar from "./Navbar";
+import { Box } from "@mui/material";
+import { useSockets } from "../context/socket.context"
 
 
-function App() {
+export default function App() {
+  //use socket context to see if username exists, render content depending on true or false
+  const { nickname } = useSockets()
+
   return (
-    <SocketsProvider>
-    <BrowserRouter>
-    <Layout/>
-    <Routes>
-    <Route path="/" element={<Homepage />} />
-    <Route path="/rooms" element={<Rooms />} />
-    <Route path="/chat" element={<Chat />} />     
-    </Routes>
-    </BrowserRouter>
-    
-      
-    </SocketsProvider>
+    <Box>
+      <Navbar />
+      {nickname ?
+        <><Rooms /><Chat /></> :
+        <Homepage />
+      }
+    </Box>
+
   );
 }
-
-export default App;

@@ -7,20 +7,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import Link from '@mui/material/Link';
 
 
-
-
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
-    
+
     padding: theme.spacing(0, 1),
     justifyContent: 'flex-start',
 }));
 
-const Rooms: React.FC = () => {
+export default function Rooms() {
 
     const [open, setOpen] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
@@ -53,132 +51,107 @@ const Rooms: React.FC = () => {
     }
 
 
-
     return (
-       
-        
+
         <Grid>
             <Button
-            onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }), color: '#fff' }}>
-            Rooms
+                onClick={handleDrawerOpen}
+                sx={{ ...(open && { display: 'none' }), color: '#fff' }}>
+                Rooms
             </Button>
-          <Typography sx={header}>
-            CREATE ROOM
-          </Typography>
-        
-        <Box textAlign={'center'}>
-          <Button 
-          onClick={handleDeleteDrawerOpen}
-          >
-    
-          <AddCircleIcon sx={icon}/>
-        </Button>
-        </Box>
+            <Typography sx={header}>
+                CREATE ROOM
+            </Typography>
+            <Box textAlign={'center'}>
+                <Button
+                    onClick={handleDeleteDrawerOpen}
+                >
 
-        <Drawer
-                    sx={drawerStyle}
-                    variant="persistent"
-                    anchor="right"
-                    open={openDelete}>
-                    <DrawerHeader >
-                        <IconButton onClick={handleDeleteDrawerClose}>
-                            <CloseIcon sx={iconStyle} />
-                        </IconButton>
-
-                        
-                      
-                    </DrawerHeader>
-                    <Typography sx={drawerText2}>
-                            Room name
-                        </Typography>
-                   
-                        <TextField sx={textfield} id="outlined-basic" label="Room name" variant="outlined"  required/>
-
-                    <Box sx={button}>
+                    <AddCircleIcon sx={icon} />
+                </Button>
+            </Box>
+            <Drawer
+                sx={drawerStyle}
+                variant="persistent"
+                anchor="right"
+                open={openDelete}>
+                <DrawerHeader >
+                    <IconButton onClick={handleDeleteDrawerClose}>
+                        <CloseIcon sx={iconStyle} />
+                    </IconButton>
+                </DrawerHeader>
+                <Typography sx={drawerText2}>
+                    Room name
+                </Typography>
+                <TextField sx={textfield} id="outlined-basic" label="Room name" variant="outlined" required />
+                <Box sx={button}>
                     <Link href="/Rooms" variant="body2">
-                    <Button type="submit" variant="contained"  >
-                    Create
-                    </Button>
+                        <Button type="submit" variant="contained"  >
+                            Create
+                        </Button>
                     </Link>
-                    </Box>
-                  
-
-                </Drawer>
-
-        <Drawer
+                </Box>
+            </Drawer>
+            <Drawer
                 sx={{
                     position: 'absolute',
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
                         marginTop: '4rem',
-
                         width: { xs: drawerWidth, sm: '35%', md: '25%', lg: '21%' },
                         height: { xs: drawerWidth, sm: '50%', md: '50%', lg: '100%' },
                         backgroundColor: '#9DC88D',
-                       
-
                     },
                 }}
                 variant="persistent"
                 anchor="left"
-                open={open}
-            >
+                open={open}>
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         <CloseIcon sx={iconStyle} />
                     </IconButton>
                 </DrawerHeader>
-
                 <Typography sx={drawerText}>
                     Rooms
                 </Typography>
-
-                
                 <Paper sx={roomStyle}>
                     <Link href="/Chat" variant="body2">
-                    <Button sx={{color: 'black'}} type="submit" >
-                        Room 1
+                        <Button sx={{ color: 'black' }} type="submit" >
+                            Room 1
                         </Button>
-                        </Link>
+                    </Link>
                 </Paper>
-            
             </Drawer>
-
-
-          </Grid>
-        
-        
-     
+        </Grid>
     );
-  }
+}
 
-  const header: SxProps = {
+const header: SxProps = {
     color: '#fff',
     textAlign: 'center',
     fontSize: '2.5rem',
     marginTop: '5rem'
-  }
-  const icon: SxProps = {
+}
+const icon: SxProps = {
     color: '#fff',
     fontSize: '6rem',
     marginTop: '5rem'
-  }
-  const drawerText: SxProps = {
+}
+const drawerText: SxProps = {
     textAlign: 'center',
     fontSize: '1.5rem',
     marginTop: '2rem'
-  }
-  const iconStyle: SxProps = {
+}
+const iconStyle: SxProps = {
     fontSize: '2rem',
     color: 'black',
     float: 'right'
 }
-  const roomStyle: SxProps = {
+const roomStyle: SxProps = {
     height: '6rem',
     marginTop: '2rem'
 }
-  const drawerText2: SxProps = {
+const drawerText2: SxProps = {
     textAlign: 'center',
     fontSize: '1.5rem'
 }
@@ -209,5 +182,3 @@ const button: SxProps = {
     marginTop: '2rem'
 
 }
-  
-  export default Rooms;
