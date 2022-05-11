@@ -1,6 +1,5 @@
 import io, { Socket } from "socket.io-client"
 import { createContext, useContext, useEffect, useState } from "react"
-import EVENTS from "../config/events"
 
 //enables interaction between client and server
 const SOCKET_URL = process.env.SOCKET_URL || "http://localhost:4000"
@@ -16,6 +15,8 @@ interface ContextInterface {
     setJoinedRoom: Function;
     roomName: string;
     setRoomName: Function;
+    messages: { message: string; nickname: string }[] ;
+    setMessages: Function;
 }
 
 const SocketContext = createContext<ContextInterface>({
@@ -26,7 +27,9 @@ const SocketContext = createContext<ContextInterface>({
     joinedRoom: false,
     setJoinedRoom: () => false,
     roomName: '',
-    setRoomName: () => false
+    setRoomName: () => false,
+    messages: [], 
+    setMessages: () => false
 })
 
 
@@ -36,6 +39,7 @@ export default function SocketsProvider(props: any) {
     const [roomName, setRoomName] = useState("");
     const [rooms, setRooms] = useState([]);
     const [joinedRoom, setJoinedRoom] = useState(false);
+    const [messages, setMessages] = useState([]);
 
     /*
         //recieves room and users
@@ -110,7 +114,9 @@ export default function SocketsProvider(props: any) {
                 joinedRoom,
                 setJoinedRoom,
                 setNickname,
-                setRoomName
+                setRoomName,
+                messages, 
+                setMessages,
             }} {...props} />
     )
 }

@@ -3,7 +3,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from "react";
 import { styled, } from "@mui/system";
 import CloseIcon from '@mui/icons-material/Close';
-import Link from '@mui/material/Link';
 import { useSockets } from "../context/socket.context";
 import '../style.css'
 
@@ -56,13 +55,23 @@ export default function CreateRoom() {
         <Typography sx={drawerText2}>
           Room name
         </Typography>
-        <TextField className="inputRounded" value={roomName} sx={textfield} id="outlined-basic" label="Room name" variant="outlined" required onChange={(e) => setRoomName(e.target.value)} />
+        <TextField
+          className="inputRounded"
+          value={roomName}
+          sx={textfield}
+          id="outlined-basic"
+          label="Room name"
+          variant="outlined"
+          required
+          onChange={(e) => setRoomName(e.target.value)} />
         <Box sx={button}>
-          <Link variant="body2" style={{ textDecoration: 'none' }}>
-            <Button sx={button2} type="submit" variant="contained" onClick={handleCreateRoom} >
-              Create
-            </Button>
-          </Link>
+          <Button
+            sx={button2}
+            type="submit"
+            variant="contained"
+            onClick={handleCreateRoom} >
+            Create
+          </Button>
         </Box>
         <Box>
         </Box>
