@@ -1,24 +1,26 @@
 import { Box, Button, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
+import { useSockets } from "../context/socket.context";
 
 
 export default function Chat() {
+  const { roomName } = useSockets()
 
-/*       //output message to dom, do this in chat i guess
-      function outputMessage(message) {
-        const div = document.createElement('div')
-        div.classList.add('message')
-        div.innerHTML = `
-    <p class="meta">${message.username} <span>${message.time}</span></p>
-    <p class="text">
-        ${message.text}
-    </p>`;
-        document.querySelector('.chat-messages').appendChild(div);
-    } */
+  //output message to dom, do this in chat i guess
+  /*       function outputMessage(message) {
+          const div = document.createElement('div')
+          div.classList.add('message')
+          div.innerHTML = `
+      <p class="meta">${message.username} <span>${message.time}</span></p>
+      <p class="text">
+          ${message.text}
+      </p>`;
+          document.querySelector('.chat-messages').appendChild(div);
+      } */
 
   return (
     <Paper sx={paperStyle}>
       <Typography sx={header}>
-        Room 1
+        {roomName}
       </Typography>
       <Paper sx={roomStyle}>
         <Typography>
@@ -43,7 +45,8 @@ const paperStyle: SxProps = {
   backgroundColor: '#E5F6DF',
   marginTop: '3rem',
   height: '40rem',
-  width: '60rem',
+  width: '100%',
+  maxWidth: '60rem',
   marginLeft: 'auto',
   marginRight: 'auto'
 }

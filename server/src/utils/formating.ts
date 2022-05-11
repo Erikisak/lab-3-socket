@@ -11,7 +11,7 @@ export const log = logger({
     timestamp: () => `,"time":"${dayjs().format()}"`,
 });
 
-//formatera för chattbubbla i domen
+//format the outputted data object
 export function formatMessage(username: string, text: string) {
     return {
         username,

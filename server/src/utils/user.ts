@@ -1,10 +1,9 @@
-//fix specific type
+//Stores information about users. fix specific type
 const users:any [] = [];
 
 //join user to chat
 export function userJoin(id: string, nickname: string, roomName: string) {
     const user = {id, nickname, roomName};
-
     users.push(user);
 
     return user;
@@ -24,7 +23,8 @@ export function userLeave(id: string) {
     }
 }
 
-// get room userss
+// get room users
 export function getRoomUsers(room:string) {
-    return users.filter(user => user.room === room);
+
+    return users.filter(user => user.roomName === room);
 }

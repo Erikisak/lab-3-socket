@@ -32,49 +32,49 @@ httpServer.listen(port, host, () => {
 
 const botName = 'Bot moderator';
 
-// run when client connects
+// run when client connects || FUNKAR
 io.on('connection', socket => {
-  log.info('user connected with id: '+ socket.id)
-    socket.on('joinRoom', ({ nickname, roomName }) => {
-      log.info(nickname + ' ' + roomName)
-      
-      // user room
-        const user = userJoin(socket.id, nickname, roomName)
-        socket.join(user.roomName)
+  log.info('user connected with id: ' + socket.id)
+  socket.on('joinRoom', ({ nickname, roomName }) => {
 
-        // notifies only to the user, welcomes current user
-        socket.emit('message', formatMessage(botName, 'Welcome to ChatCore'));
+    // user room || FUNKAR
+    const user = userJoin(socket.id, nickname, roomName)
+    socket.join(user.roomName)
 
-        // Broadcast when a user connects. notifies everyone except the user connecting.
-        socket.broadcast.to(user.roomName).emit('message', formatMessage(botName, `${user.nickname} has connected to the chat`));
+    // notifies only to the user, welcomes current user. BUG: console logs twice but it is client issue, possible solution = useEffect, google it || CURRENT
+    socket.emit('message', formatMessage(botName, `Welcome to ${roomName}`));
 
-        //Send user room info
-        io.to(user.roomName).emit('roomUsers', {
-            room: user.roomName,
-            users: getRoomUsers(user.roomName)
-        });
+    // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
+    socket.broadcast.to(user.roomName).emit('message', formatMessage(botName, `${user.nickname} has connected to the chat`));
+
+    //Send user room info || FUNKAR
+    io.to(user.roomName).emit('roomUsers', {
+      room: user.roomName,
+      users: getRoomUsers(user.roomName)
     });
+  });
 
-    //Listen for message. this is where you can use react to display the msg in the dom 🤷‍♂️
-    socket.on('chatMessage', msg => {
-        const user = getCurrentUser(socket.id);
+  //Listen for message. this is where you can use react to display the msg in the dom 🤷‍♂️
+  socket.on('chatMessage', msg => {
+    const user = getCurrentUser(socket.id);
 
-        io.to(user.room).emit('message', formatMessage(user.nickname, msg));
-    });
+    io.to(user.room).emit('message', formatMessage(user.nickname, msg));
+  });
 
-    //Runs when user disconnects
-    socket.on('disconnect', () => {
-        log.info('user disconnected')
+  //Runs when user disconnects || Funkar
+  socket.on('disconnect', () => {
+    log.info('user disconnected')
 
-        const user = userLeave(socket.id);
+    const user = userLeave(socket.id);
 
-        if (user) {
-            io.to(user.roomName).emit('message', formatMessage(botName, `${user.nickname} has left the chat`));
-            //Send user room info
-            io.to(user.roomName).emit('roomUsers', {
-                room: user.roomName,
-                users: getRoomUsers(user.roomName)
-            });
-        }
-    });
+    // CURRENT
+    if (user) {
+      io.to(user.roomName).emit('message', formatMessage(botName, `${user.nickname} has left the chat`));
+      //Send user room info
+      io.to(user.roomName).emit('roomUsers', {
+        room: user.roomName,
+        users: getRoomUsers(user.roomName)
+      });
+    }
+  });
 });

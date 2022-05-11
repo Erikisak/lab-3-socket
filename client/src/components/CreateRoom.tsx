@@ -9,9 +9,7 @@ import '../style.css'
 
 
 export default function CreateRoom() {
-  const { socket, nickname, setJoinedRoom } = useSockets();
-  const [roomName, setNewRoom] = useState('');
-
+  const { socket, nickname, setJoinedRoom, roomName, setRoomName } = useSockets();
 
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -24,6 +22,7 @@ export default function CreateRoom() {
 
   function handleCreateRoom() {
     if (!String(roomName).trim()) return;
+    //test
     console.log(nickname + ' ' + roomName)
 
     //Join chatroom, send username and room to server, on submit in createRoom component || FUNKAR
@@ -57,7 +56,7 @@ export default function CreateRoom() {
         <Typography sx={drawerText2}>
           Room name
         </Typography>
-        <TextField className="inputRounded" value={roomName} sx={textfield} id="outlined-basic" label="Room name" variant="outlined" required onChange={(e) => setNewRoom(e.target.value)} />
+        <TextField className="inputRounded" value={roomName} sx={textfield} id="outlined-basic" label="Room name" variant="outlined" required onChange={(e) => setRoomName(e.target.value)} />
         <Box sx={button}>
           <Link variant="body2" style={{ textDecoration: 'none' }}>
             <Button sx={button2} type="submit" variant="contained" onClick={handleCreateRoom} >
