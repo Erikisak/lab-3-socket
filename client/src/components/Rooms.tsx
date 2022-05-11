@@ -37,10 +37,10 @@ export default function Rooms() {
         setNewRoom('')
     }
 
-    // function handleJoinRoom(key) {
-    //     if (key === roomId) return;
-    //     socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
-    // }
+    function handleJoinRoom(key: string | undefined) {
+        if (key === roomId) return;
+        socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
+    }
 
     return (
 
@@ -115,13 +115,25 @@ export default function Rooms() {
                 <Typography sx={drawerText}>
                     Rooms
                 </Typography>
-               
-            </Drawer>
-            {Object.keys(rooms).map((key) => {
+                {Object.keys(rooms).map((key) => {
                     return (
-                        <Typography key={key}>{key}</Typography>
+                       
+                       <Paper sx={roomStyle}>
+                        <Box key={key}>
+                            <Button 
+                            
+                            title={'Join ${key}'}
+                            onClick={() => handleJoinRoom(key)}
+                            >
+                                {key}
+                                </Button>
+                                </Box>
+                                </Paper>
                     );
                 })}
+               
+            </Drawer>
+            
             <Chat/>
         </Grid>
         
@@ -132,7 +144,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     padding: theme.spacing(0, 1),
     justifyContent: 'flex-start',
-    width: '40rem',
+    width: '15rem',
 
 }));
 const header: SxProps = {
@@ -169,7 +181,7 @@ const iconStyle: SxProps = {
     float: 'right'
 }
 const roomStyle: SxProps = {
-    height: '10rem',
+    height: '7rem',
     marginTop: '2rem',
 
 }

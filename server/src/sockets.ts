@@ -52,6 +52,12 @@ function socket(io: Server) {
             })
         });
 
+        socket.on(EVENTS.CLIENT.JOIN_ROOM, (roomId) => {
+            socket.join(roomId)
+            socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
+
+        });
+
 
     });
 }

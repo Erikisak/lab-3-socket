@@ -7,7 +7,7 @@ import { useSockets } from "../context/socket.context";
 
 function Chat() {
 
-  const {socket, messages, roomId, nickname, setMessages} = useSockets ()
+  const {socket, messages, roomId, nickname, setMessages, rooms} = useSockets ()
   const newMessageRef = useRef<any>(null);
 
   function handleSendMessage() {
