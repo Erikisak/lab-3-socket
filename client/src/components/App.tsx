@@ -14,9 +14,12 @@ export default function App() {
     <Box>
       <Navbar />
       {nickname ?
-        <><Rooms /></> :
+        <><Rooms /> </> :
+        
         <Homepage />
+        
       }
+      
     </Box>
 
   );

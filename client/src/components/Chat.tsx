@@ -1,28 +1,52 @@
 import { Box, Button, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
+import { useRef } from "react";
+import EVENTS from "../config/events";
+import { useSockets } from "../context/socket.context";
+
 
 
 function Chat() {
 
+  const {socket, messages, roomId, nickname, setMessages} = useSockets ()
+  const newMessageRef = useRef<any>(null);
+
+  function handleSendMessage() {
+    const message = newMessageRef.current.value
+
+    if (!String(message).trim()) {
+      return;
+    }
+
+    socket.emit(EVENTS.CLIENT.SEND_ROOM_MESSAGE, {roomId, message, nickname})
+
+    setMessages([
+      ...messages,
+      {
+        nickname: "you",
+        message,
+      },
+    ]);
+  }
+
+  if (!roomId) {
+    return <div/>;
+  }
   return (
+    
     <Paper sx={paperStyle}>
-      <Typography sx={header}>
-        Room 1
-      </Typography>
-      <Paper sx={roomStyle}>
-        <Typography>
-          Erik
-        </Typography>
-      </Paper>
-      <Paper sx={roomStyle2}>
-        <Typography>
-          Philip
-        </Typography>
-      </Paper>
-      <Box sx={textSend}>
-        <TextField sx={textfield}>
-        </TextField>
-        <Button sx={button}>Send</Button>
-      </Box>
+      
+      {messages.map(( {message}, index) => {
+        return <p key={index}>{message}</p>;
+      })}
+
+      <div>
+        <textarea rows={1} placeholder="Type your message" ref={newMessageRef}/>
+        <button onClick={handleSendMessage}>send</button>
+      </div>
+
+
+
+
     </Paper>
   );
 }

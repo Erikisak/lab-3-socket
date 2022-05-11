@@ -1,4 +1,4 @@
-import { Paper, SxProps, Typography, TextField, Box, Button, Grid, Drawer, IconButton } from "@mui/material";
+import { Paper, SxProps, Typography, TextField, Box, Button, Grid, Drawer, IconButton, dividerClasses } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from "react";
 import { styled, } from "@mui/system";
@@ -7,6 +7,7 @@ import Link from '@mui/material/Link';
 import { useSockets } from "../context/socket.context";
 import EVENTS from "../config/events";
 import '../style.css'
+import Chat from "./Chat";
 
 
 export default function Rooms() {
@@ -36,12 +37,13 @@ export default function Rooms() {
         setNewRoom('')
     }
 
-    function handleJoinRoom(key: string | undefined) {
-        if (key === roomId) return;
-        socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
-    }
+    // function handleJoinRoom(key) {
+    //     if (key === roomId) return;
+    //     socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
+    // }
 
     return (
+
         <Grid>
             <Button
                 onClick={handleDrawerOpen}
@@ -52,7 +54,7 @@ export default function Rooms() {
                         color: '#fff',
                     }, marginTop: '5rem'
                 }}>
-                Rooms
+                CHAT
             </Button>
             <Typography sx={header}>
                 CREATE ROOM
@@ -64,6 +66,8 @@ export default function Rooms() {
                     <AddCircleIcon sx={icon} />
                 </Button>
             </Box>
+
+            
             <Drawer
                 sx={drawerStyle}
                 variant="persistent"
@@ -79,7 +83,7 @@ export default function Rooms() {
                 </Typography>
                 <TextField className="inputRounded" value={roomName} sx={textfield} id="outlined-basic" label="Room name" variant="outlined" required onChange={(e) => setNewRoom(e.target.value)} />
                 <Box sx={button}>
-                    <Link variant="body2" style={{ textDecoration: 'none' }}>
+                    <Link  variant="body2" style={{ textDecoration: 'none' }}>
                         <Button sx={button2} type="submit" variant="contained" onClick={handleCreateRoom} >
                             Create
                         </Button>
@@ -88,6 +92,8 @@ export default function Rooms() {
                 <Box>
                 </Box>
             </Drawer>
+
+
             <Drawer
                 sx={{
                     position: 'absolute',
@@ -105,20 +111,20 @@ export default function Rooms() {
                         <CloseIcon sx={iconStyle} />
                     </IconButton>
                 </DrawerHeader>
+                
                 <Typography sx={drawerText}>
                     Rooms
                 </Typography>
-                {Object.keys(rooms).map((key) => {
+               
+            </Drawer>
+            {Object.keys(rooms).map((key) => {
                     return (
-                        <Paper sx={roomStyle}>
-                            <Link href="/Chat">
-                                <Button key={key}>{key}  </Button>
-                            </Link>
-                        </Paper>
+                        <Typography key={key}>{key}</Typography>
                     );
                 })}
-            </Drawer>
+            <Chat/>
         </Grid>
+        
     );
 }
 
@@ -126,6 +132,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     padding: theme.spacing(0, 1),
     justifyContent: 'flex-start',
+    width: '40rem',
+
 }));
 const header: SxProps = {
     color: '#4D774E',
@@ -161,8 +169,9 @@ const iconStyle: SxProps = {
     float: 'right'
 }
 const roomStyle: SxProps = {
-    height: '6rem',
-    marginTop: '2rem'
+    height: '10rem',
+    marginTop: '2rem',
+
 }
 const drawerText2: SxProps = {
     color: '#fff',
@@ -195,4 +204,12 @@ const button: SxProps = {
     display: 'flex',
     justifyContent: 'center',
     marginTop: '2rem'
+}
+const paper2: SxProps = {
+    backgroundColor: 'red',
+    marginTop: '2rem',
+    height: '50rem',
+    width: '60rem',
+    marginLeft: 'auto',
+    marginRight: 'auto'
 }

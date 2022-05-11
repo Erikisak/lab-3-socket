@@ -5,13 +5,17 @@ import { nanoid } from "nanoid";
 const EVENTS = {
     connection: "connection",
     CLIENT: {
-        CREATE_ROOM: "CREATE_ROOM",
+      CREATE_USER: "CREATE_USER",
+      CREATE_ROOM: "CREATE_ROOM",
+      SEND_ROOM_MESSAGE: 'SEND_ROOM_MESSAGE',
+      JOIN_ROOM: "JOIN_ROOM",
     },
     SERVER: {
-        ROOMS: "ROOMS",
-        JOINED_ROOM: 'JOINED_ROOM'
+      ROOMS: "ROOMS",
+      JOINED_ROOM: "JOINED_ROOM",
+      ROOM_MESSAGE: "ROOM_MESSAGE",
     },
-};
+  };
 
 const rooms: Record<string, { name: string }> = {};
 
@@ -39,6 +43,15 @@ function socket(io: Server) {
 
             socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
         })
+
+        socket.on(EVENTS.CLIENT.SEND_ROOM_MESSAGE, ({roomId, message, nickname}) => {
+            socket.to(roomId).emit(EVENTS.SERVER.ROOM_MESSAGE, {
+                message,
+                nickname,
+
+            })
+        });
+
 
     });
 }
