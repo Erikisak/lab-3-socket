@@ -1,6 +1,8 @@
-import { Box, Button, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
 import { useSockets } from "../context/socket.context";
 import { FormEvent, useState } from "react";
+import Rooms from "./Rooms";
+
 
 
 export default function Chat() {
@@ -29,12 +31,15 @@ export default function Chat() {
     setNewMessage('')
   }
 
-  return ( 
-    <Paper sx={paperStyle}>
-      <Typography>{roomName}</Typography>
+  return (
+
+    <Box>
+      
+    <Card sx={paperStyle}>
+      <Typography sx={roomname}>{roomName}</Typography>
 
       {messages.map(( {message}, index) => {
-        return <Typography key={index}>{message}</Typography>;
+        return <Paper sx={chatBubble} key={index}>{message}</Paper>;
       })}
 
       <Box sx={messageBox} component='form' onSubmit={handleSendMessage}>
@@ -47,20 +52,36 @@ export default function Chat() {
         onChange={(e) => setNewMessage(e.target.value)} />
         <Button sx={button} type="submit">send</Button>
       </Box>
-    </Paper>
+    </Card>
+    </Box>
+    
   );
 }
 
 const textfieldStyle: SxProps = {
   backgroundColor: 'white',
-  width: '70%'
+  width: '70%',
+}
+const roomname: SxProps = {
+  textAlign: 'center',
+  fontSize: '2rem',
+  paddingTop: '2rem'
+
+}
+const chatBubble: SxProps = {
+  backgroundColor: 'white',
+  width: '10rem',
+  height: '5rem',
+  paddingTop: '.5rem',
+  paddingLeft: '.5rem',
+  marginLeft: '1rem',
+  marginTop: '2rem',
+  marginBottom: '2rem'
 }
 const messageBox: SxProps = {
-  position: 'absolute',
-  zIndex: '2',
+  bottom: '0',
   width: '100%',
   maxWidth: '60rem',
-  height: '100%',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -68,7 +89,8 @@ const messageBox: SxProps = {
 const paperStyle: SxProps = {
   backgroundColor: '#E5F6DF',
   marginTop: '6rem',
-  height: '40rem',
+  minHeight: '40rem',
+  height: '100%',
   width: '100%',
   maxWidth: '60rem',
   marginLeft: 'auto',

@@ -13,6 +13,7 @@ export default function App() {
   return (
     <Box>
       <Navbar />
+ 
       {nickname ?
         <Rooms /> :
         <Homepage />
