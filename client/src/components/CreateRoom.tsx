@@ -21,8 +21,6 @@ export default function CreateRoom() {
 
   function handleCreateRoom() {
     if (!String(roomName).trim()) return;
-    //test
-    console.log(nickname + ' ' + roomName)
 
     //Join chatroom, send username and room to server, on submit in createRoom component || FUNKAR
     socket.emit('joinRoom', { nickname, roomName });

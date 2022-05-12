@@ -54,11 +54,13 @@ io.on('connection', socket => {
     });
   });
 
-  //Listen for message. this is where you can use react to display the msg in the dom 🤷‍♂️
+  //Listen for message. this is where you can use react to display the msg in the dom 🤷‍♂️ || Current
   socket.on('chatMessage', msg => {
     const user = getCurrentUser(socket.id);
+    //works
+    log.info(formatMessage(user.nickname, msg))
 
-    io.to(user.room).emit('message', formatMessage(user.nickname, msg));
+    io.to(user.roomName).emit('message', formatMessage(user.nickname, msg));
   });
 
   //Runs when user disconnects || Funkar
@@ -67,7 +69,7 @@ io.on('connection', socket => {
 
     const user = userLeave(socket.id);
 
-    // CURRENT
+    // FUNKAR
     if (user) {
       io.to(user.roomName).emit('message', formatMessage(botName, `${user.nickname} has left the chat`));
       //Send user room info

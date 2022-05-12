@@ -1,59 +1,90 @@
 import { Box, Button, Card, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
 import { useSockets } from "../context/socket.context";
-import { FormEvent, useState } from "react";
-import Rooms from "./Rooms";
+import { FormEvent, useEffect, useState } from "react";
 
 
 
 export default function Chat() {
-  const {socket, messages, roomName, nickname, setMessages} = useSockets ()
+  const { socket, messages, roomName, nickname, setMessages } = useSockets()
   const [newMessage, setNewMessage] = useState('')
 
-  function handleSendMessage(e: FormEvent) {
-    e.preventDefault()
-    const message = newMessage
 
-    if (!String(message).trim()) {
-      return;
-    }
+  //recieve messages from from all
+  socket.on('message', incomingMessage => {
+    console.log(incomingMessage)
+    outPutMessage(incomingMessage)
+  })
+  //get roomname and users
+  socket.on('roomUsers', ({ room, users }) => {
+    console.log(room, users)
+  })
 
-    //sends message roomname and nickname to server
-    socket.emit('chatMessage', {roomName, message, nickname})
-
+  function outPutMessage(incomingMessage: { username: string, text: string, time: string }) {
     setMessages([
       ...messages,
       {
-        nickname: "you",
-        message,
+        username: incomingMessage.username,
+        message: incomingMessage.text,
+        time: incomingMessage.time
       },
     ]);
+  }
+
+  console.log(messages)
+
+  function handleSendMessage(e: FormEvent) {
+    e.preventDefault()
+    const text = newMessage
+
+    if (!String(text).trim()) {
+      return;
+    }
+
+    socket.emit('chatMessage', text)
 
     setNewMessage('')
   }
 
   return (
-
     <Box>
-      
-    <Card sx={paperStyle}>
-      <Typography sx={roomname}>{roomName}</Typography>
+    <Paper sx={paperStyle}>
+      <Typography sx={header}>{roomName}</Typography>
 
-      {messages.map(( {message}, index) => {
-        return <Paper sx={chatBubble} key={index}>{message}</Paper>;
-      })}
+
+      <Box sx={{display: 'flex', width: '100%', flexDirection: 'column'}}>
+        {messages.map(({ message, username, time }, index) => {
+          return (
+            //conditional rendering checks if current user sent the message. Fix styling.
+            username === nickname ?
+              <Paper sx={ownMessage} key={index}>
+                <Typography >You</Typography>
+                <Typography >{message}</Typography>
+                <Typography >{time}</Typography>
+              </Paper>
+              :
+              <Paper sx={othersMessage} key={index}>
+                <Typography >{username}</Typography>
+                <Typography >{message}</Typography>
+                <Typography >{time}</Typography>
+              </Paper>
+          )
+        })}
+      </Box>
+
 
       <Box sx={messageBox} component='form' onSubmit={handleSendMessage}>
         <TextField
-        sx={textfieldStyle}
-        multiline
-        maxRows={3}
-        placeholder="Type your message" 
-        value={newMessage} 
-        onChange={(e) => setNewMessage(e.target.value)} />
+          sx={textfieldStyle}
+          multiline
+          rows={3}
+          placeholder="Type your message"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)} />
         <Button sx={button} type="submit">send</Button>
       </Box>
-    </Card>
-    </Box>
+      </Paper>
+      </Box>
+  
     
   );
 }
@@ -105,96 +136,15 @@ const button: SxProps = {
   color: '#fff',
   background: '#4D774E '
 }
-const roomStyle: SxProps = {
-  height: '6rem',
-  width: '15rem',
-  marginTop: '2rem',
+const ownMessage: SxProps = {
+  width: 'min-content',
+  padding: '0.3rem 1rem',
+  marginTop: '1rem',
   marginLeft: '1rem'
 }
-const roomStyle2: SxProps = {
-  height: '6rem',
-  width: '15rem',
-  marginTop: '2rem',
-  marginRight: '1rem',
-  float: 'right'
+const othersMessage: SxProps = {
+  width: 'min-content',
+  padding: '0.3rem 1rem',
+  marginTop: '1rem',
+  right: '1rem',
 }
-
-//  export default Chat;
-
-//   output message to dom, do this in chat i guess
-//          function outputMessage(message) {
-//           const div = document.createElement('div')
-//           div.classList.add('message')
-//           div.innerHTML = `
-//       <p class="meta">${message.username} <span>${message.time}</span></p>
-//       <p class="text">
-//           ${message.text}
-//       </p>`;
-//           document.querySelector('.chat-messages').appendChild(div);
-//       } 
-
-
-      
-//   return (
-//     <Paper sx={paperStyle}>
-//       <Typography sx={header}>
-//         {roomName}
-//       </Typography>
-//       <Paper sx={roomStyle}>
-//         <Typography>
-//           Erik
-//         </Typography>
-//       </Paper>
-//       <Paper sx={roomStyle2}>
-//         <Typography>
-//           Philip
-//         </Typography>
-//       </Paper>
-//       <Box sx={textSend}>
-//         <TextField sx={textfield}>
-//         </TextField>
-//         <Button sx={button}>Send</Button>
-//       </Box>
-//     </Paper>
-//   );
-// }
-
-// const paperStyle: SxProps = {
-//   backgroundColor: '#E5F6DF',
-//   marginTop: '3rem',
-//   height: '40rem',
-//   width: '100%',
-//   maxWidth: '60rem',
-//   marginLeft: 'auto',
-//   marginRight: 'auto'
-// }
-// const header: SxProps = {
-//   textAlign: 'center',
-//   fontSize: '2.5rem',
-//   marginTop: '5rem'
-// }
-// const textSend: SxProps = {
-//   bottom: '0%',
-//   position: 'fixed',
-//   marginBottom: '2.3rem'
-// }
-// const textfield: SxProps = {
-//   width: '55rem'
-// }
-// const button: SxProps = {
-//   color: '#fff',
-//   background: '#4D774E '
-// }
-// const roomStyle: SxProps = {
-//   height: '6rem',
-//   width: '15rem',
-//   marginTop: '2rem',
-//   marginLeft: '1rem'
-// }
-// const roomStyle2: SxProps = {
-//   height: '6rem',
-//   width: '15rem',
-//   marginTop: '2rem',
-//   marginRight: '1rem',
-//   float: 'right'
-// }
