@@ -15,7 +15,7 @@ interface ContextInterface {
     setJoinedRoom: Function;
     roomName: string;
     setRoomName: Function;
-    messages: { message: string; nickname: string }[] ;
+    messages: { message: string; username: string; time: string }[] ;
     setMessages: Function;
 }
 
@@ -87,21 +87,6 @@ export default function SocketsProvider(props: any) {
     /*     socket.on(EVENTS.SERVER.ROOMS, (value) => {
             setRooms(value);
         }); */
-
-
-    // useEffect supposed to run only once but still logs twice?
-    useEffect(() => {
-        //recieve messages from bot moderator
-        socket.on('message', message => {
-            console.log(message)
-        })
-        //get roomname and users
-        socket.on('roomUsers', ({ room, users }) => {
-            console.log(room, users)
-        })
-    }, [])
-
-
 
     return (
         <SocketContext.Provider
