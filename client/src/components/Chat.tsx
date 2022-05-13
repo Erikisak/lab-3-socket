@@ -1,6 +1,7 @@
 import { Box, Button, Paper, SxProps, TextField, Typography } from "@mui/material";
 import { useSockets } from "../context/socket.context";
 import { FormEvent, useState } from "react";
+import Sidebar from "./Sidebar";
 
 
 
@@ -55,7 +56,10 @@ export default function Chat() {
   
 
   return (
+      <Box>
+         <Sidebar/>
       <Paper sx={paperStyle}>
+         <Typography sx={istyping}>{isTyping}</Typography>
         <Typography sx={header}>{roomName}</Typography>
         <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
           {messages.map(({ message, username, time }, index) => {
@@ -97,6 +101,7 @@ export default function Chat() {
         </Paper>
         </Box>
       </Paper>
+      </Box>
       
   );
 }
@@ -109,7 +114,7 @@ const istyping: SxProps = {
   minWidth: '8rem',
   float: 'right',
   marginRight: '1rem',
-  marginTop: '5rem',
+  
 }
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
