@@ -17,6 +17,7 @@ interface ContextInterface {
     setRoomName: Function;
     messages: { message: string; username: string; time: string }[] ;
     setMessages: Function;
+
 }
 
 const SocketContext = createContext<ContextInterface>({
@@ -29,7 +30,8 @@ const SocketContext = createContext<ContextInterface>({
     roomName: '',
     setRoomName: () => false,
     messages: [], 
-    setMessages: () => false
+    setMessages: () => false,
+  
 })
 
 
@@ -88,6 +90,15 @@ export default function SocketsProvider(props: any) {
             setRooms(value);
         }); */
 
+        // socket.on(EVENTS.SERVER.JOINED_ROOM, (value) => {
+        //     setRoomId(value);
+    
+        //     setMessages([]);
+        // });
+
+
+        
+
     return (
         <SocketContext.Provider
             value={{
@@ -102,6 +113,7 @@ export default function SocketsProvider(props: any) {
                 setRoomName,
                 messages, 
                 setMessages,
+         
             }} {...props} />
     )
 }

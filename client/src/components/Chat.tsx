@@ -9,6 +9,12 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('')
 
 
+
+
+  
+  
+
+
   //recieve messages from from all. This isnt great, recieves duplicates, try to fix.
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
@@ -29,6 +35,7 @@ export default function Chat() {
   }
 
 
+
   function handleSendMessage(e: FormEvent) {
     e.preventDefault()
     const text = newMessage
@@ -40,6 +47,7 @@ export default function Chat() {
     socket.emit('chatMessage', text)
 
     setNewMessage('')
+
   }
 
   return (
@@ -55,6 +63,7 @@ export default function Chat() {
                   <Typography sx={usernameStyle}>You</Typography>
                   <Typography sx={messageStyle}>{message}</Typography>
                   <Typography sx={timeStyle}>{time}</Typography>
+                  <div id="feedback"></div>
                 </Paper>
                 :
                 <Paper sx={othersMessage} key={index}>

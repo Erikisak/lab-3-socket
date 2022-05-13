@@ -3,7 +3,7 @@ import express from "express"
 import { createServer } from "http"
 import { Server } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
-import { log, formatMessage } from "./utils/formating"
+import { log, formatMessage } from "./utils/formatting"
 import { userJoin, getRoomUsers, getCurrentUser, userLeave } from "./utils/user"
 /* import socket from "./sockets"
  */
@@ -62,6 +62,7 @@ io.on('connection', socket => {
 
     io.to(user.roomName).emit('message', formatMessage(user.nickname, msg));
   });
+
 
   //Runs when user disconnects || Funkar
   socket.on('disconnect', () => {
