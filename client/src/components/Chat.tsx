@@ -1,6 +1,6 @@
-import { Box, Button, Card, Drawer, Grid, IconButton, Paper, SxProps, TextField, Typography } from "@mui/material";
+import { Box, Button, Paper, SxProps, TextField, Typography } from "@mui/material";
 import { useSockets } from "../context/socket.context";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
 
 
@@ -9,15 +9,13 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('')
 
 
-  //recieve messages from from all
+  //recieve messages from from all. This isnt great, recieves duplicates, try to fix.
   socket.on('message', incomingMessage => {
-    console.log(incomingMessage)
     outPutMessage(incomingMessage)
   })
   //get roomname and users
-  socket.on('roomUsers', ({ room, users }) => {
-    console.log(room, users)
-  })
+  //socket.on('roomUsers', ({ room, users }) => {
+  //})
 
   function outPutMessage(incomingMessage: { username: string, text: string, time: string }) {
     setMessages([
@@ -30,7 +28,6 @@ export default function Chat() {
     ]);
   }
 
-  console.log(messages)
 
   function handleSendMessage(e: FormEvent) {
     e.preventDefault()
@@ -47,48 +44,46 @@ export default function Chat() {
 
   return (
     <Box>
-    <Paper sx={paperStyle}>
-      <Typography sx={header}>{roomName}</Typography>
-
-
-      <Box sx={{display: 'flex', width: '100%', flexDirection: 'column'}}>
-        {messages.map(({ message, username, time }, index) => {
-          return (
-            //conditional rendering checks if current user sent the message. Fix styling.
-            username === nickname ?
-              <Paper sx={ownMessage} key={index}>
-                <Typography >You</Typography>
-                <Typography >{message}</Typography>
-                <Typography >{time}</Typography>
-              </Paper>
-              :
-              <Paper sx={othersMessage} key={index}>
-                <Typography >{username}</Typography>
-                <Typography >{message}</Typography>
-                <Typography >{time}</Typography>
-              </Paper>
-          )
-        })}
-      </Box>
-
-
-      <Box sx={messageBox} component='form' onSubmit={handleSendMessage}>
-        <TextField
-          sx={textfieldStyle}
-          multiline
-          rows={3}
-          placeholder="Type your message"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)} />
-        <Button sx={button} type="submit">send</Button>
-      </Box>
+      <Paper sx={paperStyle}>
+        <Typography sx={header}>{roomName}</Typography>
+        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
+          {messages.map(({ message, username, time }, index) => {
+            return (
+              //conditional rendering checks if current user sent the message. Fix styling.
+              username === nickname ?
+                <Paper sx={ownMessage} key={index}>
+                  <Typography sx={usernameStyle}>You</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+                :
+                <Paper sx={othersMessage} key={index}>
+                  <Typography sx={usernameStyle}>{username}</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+            )
+          })}
+        </Box>
+        <Box sx={messageBox} component='form' onSubmit={handleSendMessage}>
+          <TextField
+            sx={textfieldStyle}
+            multiline
+            required
+            rows={3}
+            placeholder="Type your message"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)} />
+          <Button sx={button} type="submit">send</Button>
+        </Box>
       </Paper>
-      </Box>
-  
-    
+    </Box>
   );
 }
 
+const messageStyle: SxProps = {}
+const usernameStyle: SxProps = {}
+const timeStyle: SxProps = {}
 const textfieldStyle: SxProps = {
   backgroundColor: 'white',
   width: '70%',
@@ -98,16 +93,6 @@ const roomname: SxProps = {
   fontSize: '2rem',
   paddingTop: '2rem'
 
-}
-const chatBubble: SxProps = {
-  backgroundColor: 'white',
-  width: '10rem',
-  height: '5rem',
-  paddingTop: '.5rem',
-  paddingLeft: '.5rem',
-  marginLeft: '1rem',
-  marginTop: '2rem',
-  marginBottom: '2rem'
 }
 const messageBox: SxProps = {
   bottom: '0',
@@ -147,4 +132,14 @@ const othersMessage: SxProps = {
   padding: '0.3rem 1rem',
   marginTop: '1rem',
   right: '1rem',
+}
+const chatBubble: SxProps = {
+  backgroundColor: 'white',
+  width: '10rem',
+  height: '5rem',
+  paddingTop: '.5rem',
+  paddingLeft: '.5rem',
+  marginLeft: '1rem',
+  marginTop: '2rem',
+  marginBottom: '2rem'
 }

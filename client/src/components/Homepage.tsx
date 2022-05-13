@@ -28,9 +28,11 @@ export default function Homepage() {
                     </Typography>
                 </Grid>
                 <TextField
+                    autoComplete="off"
                     className="inputRounded"
                     value={inputValue}
                     sx={textfield}
+                    inputProps={{minLength: 3}}
                     id="outlined-basic"
                     label="Nickname"
                     variant="outlined"

@@ -50,26 +50,29 @@ export default function CreateRoom() {
             <CloseIcon sx={iconStyle} />
           </IconButton>
         </DrawerHeader>
-        <Typography sx={drawerText2}>
-          Room name
-        </Typography>
-        <TextField
-          className="inputRounded"
-          value={roomName}
-          sx={textfield}
-          id="outlined-basic"
-          label="Room name"
-          variant="outlined"
-          required
-          onChange={(e) => setRoomName(e.target.value)} />
-        <Box sx={button}>
-          <Button
-            sx={button2}
-            type="submit"
-            variant="contained"
-            onClick={handleCreateRoom} >
-            Create
-          </Button>
+        <Box component='form' onSubmit={handleCreateRoom}>
+          <Typography sx={drawerText2}>
+            Room name
+          </Typography>
+          <TextField
+            autoComplete="off"
+            inputProps={{ minLength: 3 }}
+            className="inputRounded"
+            value={roomName}
+            sx={textfield}
+            id="outlined-basic"
+            label="Room name"
+            variant="outlined"
+            required
+            onChange={(e) => setRoomName(e.target.value)} />
+          <Box sx={button}>
+            <Button
+              sx={button2}
+              type="submit"
+              variant="contained" >
+              Create
+            </Button>
+          </Box>
         </Box>
         <Box>
         </Box>
