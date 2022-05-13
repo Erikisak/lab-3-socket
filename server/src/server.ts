@@ -1,11 +1,10 @@
 import express from "express"
 import { createServer } from "http"
-import { Server, Socket } from "socket.io"
+import { Server } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
 import { log, formatMessage } from "./utils/formatting"
 import { userJoin, getRoomUsers, getCurrentUser, userLeave } from "./utils/user"
-/* import socket from "./sockets"
- */
+
 
 const port = 4000
 const host = 'localhost'
@@ -68,22 +67,18 @@ io.on('connection', socket => {
     io.to(user.roomName).emit('message', formatMessage(user.nickname, msg));
   });
 
-
   socket.on('leaveRoom', () => {
     const user = userLeave(socket.id);
 
     if (user) {
-      io.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has left the chat`));
+      socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has left the chat`));
       //Send user room info
-      io.to(user.roomName).emit('roomUsers', {
+      socket.broadcast.to(user.roomName).emit('roomUsers', {
         room: user.roomName,
         users: getRoomUsers(user.roomName)
       });
     }
-    log.info(user)
   })
-
-
 
   //Runs when user disconnects || Funkar
   socket.on('disconnect', () => {

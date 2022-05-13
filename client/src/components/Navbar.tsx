@@ -16,7 +16,6 @@ export default function Navbar() {
     socket.emit('leaveRoom')
     setJoinedRoom(false)
     setMessages([])
-    console.log('exited')
   }
 
   return (

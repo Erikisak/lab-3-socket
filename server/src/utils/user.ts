@@ -1,16 +1,16 @@
 //Stores information about users. fix specific type
-const users:any [] = [];
+const users: any[] = [];
 
 //join user to chat
 export function userJoin(id: string, nickname: string, roomName: string) {
-    const user = {id, nickname, roomName};
+    const user = { id, nickname, roomName };
     users.push(user);
 
     return user;
 }
 
 //Get current user
-export function getCurrentUser(id:string) {
+export function getCurrentUser(id: string) {
     return users.find(user => user.id === id);
 }
 
@@ -24,7 +24,7 @@ export function userLeave(id: string) {
 }
 
 // get room users
-export function getRoomUsers(room:string) {
+export function getRoomUsers(room: string) {
 
     return users.filter(user => user.roomName === room);
 }
