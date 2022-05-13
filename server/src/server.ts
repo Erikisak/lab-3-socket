@@ -1,6 +1,6 @@
 import express from "express"
 import { createServer } from "http"
-import { Server } from "socket.io"
+import { Server, Socket } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
 import { log, formatMessage } from "./utils/formatting"
 import { userJoin, getRoomUsers, getCurrentUser, userLeave } from "./utils/user"
@@ -53,6 +53,12 @@ io.on('connection', socket => {
     });
   });
 
+  socket.on("isTyping", () => {
+    // socket.broadcast.to(roomName).emit("isTyping", socket.data.nickname);
+    const user = getCurrentUser(socket.id);
+    socket.broadcast.to(user.roomName).emit('isTyping', user.nickname);
+  });
+
   //Listen for message. this is where you send the msg to the client || Funkar
   socket.on('chatMessage', msg => {
     const user = getCurrentUser(socket.id);
@@ -61,6 +67,7 @@ io.on('connection', socket => {
 
     io.to(user.roomName).emit('message', formatMessage(user.nickname, msg));
   });
+
 
   socket.on('leaveRoom', () => {
     const user = userLeave(socket.id);
@@ -75,6 +82,8 @@ io.on('connection', socket => {
     }
     log.info(user)
   })
+
+
 
   //Runs when user disconnects || Funkar
   socket.on('disconnect', () => {

@@ -27,9 +27,12 @@ export default function Rooms() {
         socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
     } */
 
+    
+
 
     return (
         !joinedRoom ?
+        
             <Grid>
                 <Button
                     onClick={handleDrawerOpen}

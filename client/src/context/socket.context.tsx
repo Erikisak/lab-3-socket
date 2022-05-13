@@ -1,6 +1,7 @@
 import io, { Socket } from "socket.io-client"
 import { createContext, useContext, useEffect, useState } from "react"
 
+
 //enables interaction between client and server
 const SOCKET_URL = process.env.SOCKET_URL || "http://localhost:4000"
 const socket = io(SOCKET_URL)
@@ -17,6 +18,7 @@ interface ContextInterface {
     setRoomName: Function;
     messages: { message: string; username: string; time: string }[] ;
     setMessages: Function;
+    isTyping: string;
 }
 
 const SocketContext = createContext<ContextInterface>({
@@ -29,9 +31,11 @@ const SocketContext = createContext<ContextInterface>({
     roomName: '',
     setRoomName: () => false,
     messages: [], 
-    setMessages: () => false
+    setMessages: () => false,
+    isTyping: '',
 })
 
+export type IOSocket = typeof socket;
 
 export default function SocketsProvider(props: any) {
     const [nickname, setNickname] = useState('');
@@ -40,6 +44,7 @@ export default function SocketsProvider(props: any) {
     const [rooms, setRooms] = useState([]);
     const [joinedRoom, setJoinedRoom] = useState(false);
     const [messages, setMessages] = useState([]);
+    const [isTyping, setIsTyping] = useState<string>('');
 
     /*
         //recieves room and users
@@ -87,6 +92,14 @@ export default function SocketsProvider(props: any) {
     /*     socket.on(EVENTS.SERVER.ROOMS, (value) => {
             setRooms(value);
         }); */
+            
+        
+          socket.on('isTyping', (username: string) => {
+            if (username) setIsTyping(`${username} is typing...`);
+            setTimeout(() => setIsTyping(''), 2000);
+          });
+        
+
 
     return (
         <SocketContext.Provider
@@ -102,6 +115,7 @@ export default function SocketsProvider(props: any) {
                 setRoomName,
                 messages, 
                 setMessages,
+                isTyping: isTyping,
             }} {...props} />
     )
 }
