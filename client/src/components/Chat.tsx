@@ -12,9 +12,11 @@ export default function Chat() {
   //recieve messages from from all. This isnt great, recieves duplicates, try to fix.
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
+    console.log(incomingMessage)
   })
   //get roomname and users
   //socket.on('roomUsers', ({ room, users }) => {
+  //  console.log(room, users)
   //})
 
   function outPutMessage(incomingMessage: { username: string, text: string, time: string }) {
