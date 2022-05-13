@@ -11,6 +11,7 @@ export default function Homepage() {
         e.preventDefault()
         //save nickname
         setNickname(inputValue)
+        localStorage.setItem('nickname', inputValue)
     }
 
     return (
@@ -27,9 +28,11 @@ export default function Homepage() {
                     </Typography>
                 </Grid>
                 <TextField
+                    autoComplete="off"
                     className="inputRounded"
                     value={inputValue}
                     sx={textfield}
+                    inputProps={{minLength: 3}}
                     id="outlined-basic"
                     label="Nickname"
                     variant="outlined"

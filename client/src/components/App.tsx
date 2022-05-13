@@ -4,6 +4,7 @@ import Chat from "./Chat";
 import Navbar from "./Navbar";
 import { Box } from "@mui/material";
 import { useSockets } from "../context/socket.context"
+import ErrorBoundary from "./ErrorBoundary";
 
 
 export default function App() {
@@ -13,11 +14,12 @@ export default function App() {
   return (
     <Box>
       <Navbar />
-      {nickname ?
-        <><Rooms /></> :
-        <Homepage />
-      }
+      <ErrorBoundary>
+        {nickname ?
+          <Rooms /> :
+          <Homepage />
+        }
+      </ErrorBoundary>
     </Box>
-
   );
 }
