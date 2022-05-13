@@ -3,18 +3,14 @@ import { useSockets } from "../context/socket.context";
 import { FormEvent, useState } from "react";
 
 
-
- 
-
 export default function Chat() {
-  const { socket, messages, roomName, nickname, setMessages, isTyping} = useSockets()
+  const { socket, messages, roomName, nickname, setMessages, isTyping } = useSockets()
   const [newMessage, setNewMessage] = useState('')
 
 
-  //recieve messages from from all. This isnt great, recieves duplicates, try to fix.
+  //recieve messages from from all.
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
-    console.log(incomingMessage)
   })
   //get roomname and users
   //socket.on('roomUsers', ({ room, users }) => {
@@ -33,11 +29,10 @@ export default function Chat() {
   }
 
   const handleTyping = (e: any) => {
-    socket.emit('isTyping', );
+    socket.emit('isTyping',);
 
     console.log('isTyping')
-}
-
+  }
 
   function handleSendMessage(e: FormEvent) {
     e.preventDefault()
@@ -51,38 +46,36 @@ export default function Chat() {
 
     setNewMessage('')
   }
-  
-  
 
   return (
-      <Paper sx={paperStyle}>
-        <Typography sx={header}>{roomName}</Typography>
-        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
-          {messages.map(({ message, username, time }, index) => {
-            return (
-              //conditional rendering checks if current user sent the message. Fix styling.
-              username === nickname ?
-                <Paper sx={ownMessage} key={index}>
-                  <Typography sx={usernameStyle}>You</Typography>
-                  <Typography sx={messageStyle}>{message}</Typography>
-                  <Typography sx={timeStyle}>{time}</Typography>
-                </Paper>
-                :
-                <Paper sx={othersMessage} key={index}>
-                  <Typography sx={usernameStyle}>{username}</Typography>
-                  <Typography sx={messageStyle}>{message}</Typography>
-                  <Typography sx={timeStyle}>{time}</Typography>
-                </Paper>
-                
-            )
-              
-          })}
-        
-        </Box>
-        <Box >
-        <Typography sx={istyping}>{isTyping}</Typography>
+    <Paper sx={paperStyle}>
+      <Typography sx={header}>{roomName}</Typography>
+      <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
+        {messages.map(({ message, username, time }, index) => {
+          return (
+            //conditional rendering checks if current user sent the message. Fix styling.
+            username === nickname ?
+              <Paper sx={ownMessage} key={index}>
+                <Typography sx={usernameStyle}>You</Typography>
+                <Typography sx={messageStyle}>{message}</Typography>
+                <Typography sx={timeStyle}>{time}</Typography>
+              </Paper>
+              :
+              <Paper sx={othersMessage} key={index}>
+                <Typography sx={usernameStyle}>{username}</Typography>
+                <Typography sx={messageStyle}>{message}</Typography>
+                <Typography sx={timeStyle}>{time}</Typography>
+              </Paper>
+          )
+        })}
+
+      </Box>
+      <Box >
         <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
-        
+          <Box /* sx={istypingBox} */>
+            <Typography /* sx={istypingText} */ >{isTyping}</Typography>
+          </Box>
+
           <TextField
             sx={textfieldStyle}
             multiline
@@ -92,25 +85,29 @@ export default function Chat() {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleTyping} />
-            
+
           <Button sx={button} type="submit">send</Button>
         </Paper>
-        </Box>
-      </Paper>
-      
+      </Box>
+    </Paper>
+
   );
 }
 
 const messageStyle: SxProps = {
   padding: '0.3rem 0.5rem',
 }
-const istyping: SxProps = {
+/* const istypingText: SxProps = {
+  position: 'absolute'
+}
+const istypingBox: SxProps = {
   height: '2rem',
   minWidth: '8rem',
   float: 'right',
   marginRight: '1rem',
-  marginTop: '5rem',
-}
+  margin: 'auto'
+  position: 'fixed',
+} */
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
   backgroundColor: '#4D774E',
