@@ -1,9 +1,8 @@
-import { info } from "console"
 import express from "express"
 import { createServer } from "http"
 import { Server } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
-import { log, formatMessage } from "./utils/formating"
+import { log, formatMessage } from "./utils/formatting"
 import { userJoin, getRoomUsers, getCurrentUser, userLeave } from "./utils/user"
 /* import socket from "./sockets"
  */
@@ -41,7 +40,7 @@ io.on('connection', socket => {
     const user = userJoin(socket.id, nickname, roomName)
     socket.join(user.roomName)
 
-    // notifies only to the user, welcomes current user. BUG: console logs twice but it is client issue, possible solution = useEffect, google it || CURRENT
+    // notifies only to the user, welcomes current user. BUG: console logs twice, clientside issue || CURRENT
     socket.emit('message', formatMessage(bot, `Welcome to ${roomName}`));
 
     // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
@@ -54,7 +53,7 @@ io.on('connection', socket => {
     });
   });
 
-  //Listen for message. this is where you can use react to display the msg in the dom 🤷‍♂️ || Current
+  //Listen for message. this is where you send the msg to the client || Funkar
   socket.on('chatMessage', msg => {
     const user = getCurrentUser(socket.id);
     //works

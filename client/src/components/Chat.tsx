@@ -43,10 +43,9 @@ export default function Chat() {
   }
 
   return (
-    <Box>
       <Paper sx={paperStyle}>
         <Typography sx={header}>{roomName}</Typography>
-        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
           {messages.map(({ message, username, time }, index) => {
             return (
               //conditional rendering checks if current user sent the message. Fix styling.
@@ -65,7 +64,7 @@ export default function Chat() {
             )
           })}
         </Box>
-        <Box sx={messageBox} component='form' onSubmit={handleSendMessage}>
+        <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
           <TextField
             sx={textfieldStyle}
             multiline
@@ -75,15 +74,25 @@ export default function Chat() {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)} />
           <Button sx={button} type="submit">send</Button>
-        </Box>
+        </Paper>
       </Paper>
-    </Box>
   );
 }
 
-const messageStyle: SxProps = {}
-const usernameStyle: SxProps = {}
-const timeStyle: SxProps = {}
+const messageStyle: SxProps = {
+  padding: '0.3rem 0.5rem',
+}
+const usernameStyle: SxProps = {
+  padding: '0.3rem 0.5rem',
+  backgroundColor: '#4D774E',
+  color: 'white',
+}
+const timeStyle: SxProps = {
+  paddingBottom: '0.3rem',
+  width: '100%',
+  color: 'gray',
+  textAlign: 'right'
+}
 const textfieldStyle: SxProps = {
   backgroundColor: 'white',
   width: '70%',
@@ -95,12 +104,16 @@ const roomname: SxProps = {
 
 }
 const messageBox: SxProps = {
+  position: 'fixed',
+  backgroundColor: '#E5F6DF',
   bottom: '0',
+  padding: '2rem 0',
   width: '100%',
   maxWidth: '60rem',
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',
+  alignItems: 'end',
+  gap: '0.5rem'
 }
 const paperStyle: SxProps = {
   backgroundColor: '#E5F6DF',
@@ -122,16 +135,21 @@ const button: SxProps = {
   background: '#4D774E '
 }
 const ownMessage: SxProps = {
-  width: 'min-content',
-  padding: '0.3rem 1rem',
+  minWidth: '6rem',
+  wordWrap: 'break-word',
+  width: 'max-content',
+  maxWidth: '20rem',
   marginTop: '1rem',
   marginLeft: '1rem'
 }
 const othersMessage: SxProps = {
-  width: 'min-content',
-  padding: '0.3rem 1rem',
+  minWidth: '6rem',
+  wordWrap: 'break-word',
+  width: 'max-content',
+  maxWidth: '20rem',
   marginTop: '1rem',
-  right: '1rem',
+  marginLeft: 'auto',
+  marginRight: '1rem'
 }
 const chatBubble: SxProps = {
   backgroundColor: 'white',
