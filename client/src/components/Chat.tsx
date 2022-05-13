@@ -53,9 +53,9 @@ export default function Chat() {
       <Box>
         <Sidebar/>
         <Paper sx={paperStyle}>
-          <Box sx={{display: 'flex'}}>
+         
             <Typography sx={header}>{roomName}</Typography>
-          </Box>
+          
           <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
             {messages.map(({ message, username, time }, index) => {
               return (
@@ -67,21 +67,21 @@ export default function Chat() {
                     <Typography sx={timeStyle}>{time}</Typography>
                   </Paper>
                   :
-                  <Paper sx={othersMessage} key={index}>
+                  <Box sx={othersMessage} key={index}>
+                  <Paper >
                     <Typography sx={usernameStyle}>{username}</Typography>
                     <Typography sx={messageStyle}>{message}</Typography>
                     <Typography sx={timeStyle}>{time}</Typography>
                   </Paper>
+                  
+                 </Box>
+               
               )
             })}
-  
+            <Typography sx={istypingText} >{isTyping}</Typography>
           </Box>
           <Box >
             <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
-              <Box sx={istypingBox}>
-                <Typography /* sx={istypingText} */ >{isTyping}</Typography>
-              </Box>
-  
               <TextField
                 sx={textfieldStyle}
                 multiline
@@ -106,8 +106,8 @@ const messageStyle: SxProps = {
 // const istypingText: SxProps = {
 // position: 'absolute'
 // }
-const istypingBox: SxProps = {
-  
+const istypingText: SxProps = {
+  marginTop: '2rem'
 }
 
 const usernameStyle: SxProps = {
@@ -168,7 +168,8 @@ const ownMessage: SxProps = {
   width: 'max-content',
   maxWidth: '20rem',
   marginTop: '1rem',
-  marginLeft: '1rem'
+  marginLeft: '1rem',
+
 }
 const othersMessage: SxProps = {
   minWidth: '6rem',
@@ -177,7 +178,8 @@ const othersMessage: SxProps = {
   maxWidth: '20rem',
   marginTop: '1rem',
   marginLeft: 'auto',
-  marginRight: '1rem'
+  marginRight: '1rem',
+
 }
 const chatBubble: SxProps = {
   backgroundColor: 'white',
