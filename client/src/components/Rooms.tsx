@@ -22,10 +22,10 @@ export default function Rooms() {
         setOpen(false);
     };
 
-    /* function handleJoinRoom(key: string | undefined) {
-        if (key === roomId) return;
-        socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
-    } */
+    // function handleJoinRoom(key: string | undefined) {
+    //     if (key === roomId) return;
+    //     socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
+    // }
 
 
     return (
