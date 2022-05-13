@@ -29,7 +29,7 @@ export default function CreateRoom() {
 
   return (
 
-    <Box>
+    <Box >
       <Typography sx={header}>
         CREATE ROOM
       </Typography>

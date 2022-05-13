@@ -4,8 +4,10 @@ import { FormEvent, useState } from "react";
 
 
 
+ 
+
 export default function Chat() {
-  const { socket, messages, roomName, nickname, setMessages } = useSockets()
+  const { socket, messages, roomName, nickname, setMessages, isTyping} = useSockets()
   const [newMessage, setNewMessage] = useState('')
 
 
@@ -30,6 +32,12 @@ export default function Chat() {
     ]);
   }
 
+  const handleTyping = (e: any) => {
+    socket.emit('isTyping', );
+
+    console.log('isTyping')
+}
+
 
   function handleSendMessage(e: FormEvent) {
     e.preventDefault()
@@ -43,6 +51,8 @@ export default function Chat() {
 
     setNewMessage('')
   }
+  
+  
 
   return (
       <Paper sx={paperStyle}>
@@ -63,10 +73,16 @@ export default function Chat() {
                   <Typography sx={messageStyle}>{message}</Typography>
                   <Typography sx={timeStyle}>{time}</Typography>
                 </Paper>
+                
             )
+              
           })}
+        
         </Box>
+        <Box >
+        <Typography sx={istyping}>{isTyping}</Typography>
         <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
+        
           <TextField
             sx={textfieldStyle}
             multiline
@@ -74,15 +90,26 @@ export default function Chat() {
             rows={3}
             placeholder="Type your message"
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)} />
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleTyping} />
+            
           <Button sx={button} type="submit">send</Button>
         </Paper>
+        </Box>
       </Paper>
+      
   );
 }
 
 const messageStyle: SxProps = {
   padding: '0.3rem 0.5rem',
+}
+const istyping: SxProps = {
+  height: '2rem',
+  minWidth: '8rem',
+  float: 'right',
+  marginRight: '1rem',
+  marginTop: '5rem',
 }
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
@@ -115,11 +142,11 @@ const messageBox: SxProps = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'end',
-  gap: '0.5rem'
+  gap: '0.5rem',
 }
 const paperStyle: SxProps = {
   backgroundColor: '#E5F6DF',
-  marginTop: '6rem',
+
   minHeight: '40rem',
   height: '100%',
   width: '100%',
