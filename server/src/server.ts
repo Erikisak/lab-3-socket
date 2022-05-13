@@ -62,6 +62,20 @@ io.on('connection', socket => {
     io.to(user.roomName).emit('message', formatMessage(user.nickname, msg));
   });
 
+  socket.on('leaveRoom', () => {
+    const user = userLeave(socket.id);
+
+    if (user) {
+      io.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has left the chat`));
+      //Send user room info
+      io.to(user.roomName).emit('roomUsers', {
+        room: user.roomName,
+        users: getRoomUsers(user.roomName)
+      });
+    }
+    log.info(user)
+  })
+
   //Runs when user disconnects || Funkar
   socket.on('disconnect', () => {
     log.info('user disconnected')

@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useSockets } from '../context/socket.context';
-import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 
@@ -14,7 +13,7 @@ export default function Navbar() {
   const { joinedRoom, setJoinedRoom, socket, setMessages } = useSockets();
 
   function exitRoom() {
-    //socket.emit('disconnect')
+    socket.emit('leaveRoom')
     setJoinedRoom(false)
     setMessages([])
     console.log('exited')
