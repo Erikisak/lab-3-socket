@@ -1,6 +1,7 @@
 import { Box, Button, Paper, SxProps, TextField, Typography } from "@mui/material";
 import { useSockets } from "../context/socket.context";
 import { FormEvent, useState } from "react";
+import Sidebar from "./Sidebar";
 
 
 export default function Chat() {
@@ -48,48 +49,51 @@ export default function Chat() {
   }
 
   return (
-    <Paper sx={paperStyle}>
-      <Typography sx={header}>{roomName}</Typography>
-      <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
-        {messages.map(({ message, username, time }, index) => {
-          return (
-            //conditional rendering checks if current user sent the message. Fix styling.
-            username === nickname ?
-              <Paper sx={ownMessage} key={index}>
-                <Typography sx={usernameStyle}>You</Typography>
-                <Typography sx={messageStyle}>{message}</Typography>
-                <Typography sx={timeStyle}>{time}</Typography>
-              </Paper>
-              :
-              <Paper sx={othersMessage} key={index}>
-                <Typography sx={usernameStyle}>{username}</Typography>
-                <Typography sx={messageStyle}>{message}</Typography>
-                <Typography sx={timeStyle}>{time}</Typography>
-              </Paper>
-          )
-        })}
-
-      </Box>
-      <Box >
-        <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
-          <Box /* sx={istypingBox} */>
-            <Typography /* sx={istypingText} */ >{isTyping}</Typography>
-          </Box>
-
-          <TextField
-            sx={textfieldStyle}
-            multiline
-            required
-            rows={3}
-            placeholder="Type your message"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleTyping} />
-
-          <Button sx={button} type="submit">send</Button>
-        </Paper>
-      </Box>
-    </Paper>
+    <Box>
+      <Sidebar/>
+      <Paper sx={paperStyle}>
+        <Typography sx={header}>{roomName}</Typography>
+        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
+          {messages.map(({ message, username, time }, index) => {
+            return (
+              //conditional rendering checks if current user sent the message. Fix styling.
+              username === nickname ?
+                <Paper sx={ownMessage} key={index}>
+                  <Typography sx={usernameStyle}>You</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+                :
+                <Paper sx={othersMessage} key={index}>
+                  <Typography sx={usernameStyle}>{username}</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+            )
+          })}
+  
+        </Box>
+        <Box >
+          <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
+            <Box /* sx={istypingBox} */>
+              <Typography /* sx={istypingText} */ >{isTyping}</Typography>
+            </Box>
+  
+            <TextField
+              sx={textfieldStyle}
+              multiline
+              required
+              rows={3}
+              placeholder="Type your message"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={handleTyping} />
+  
+            <Button sx={button} type="submit">send</Button>
+          </Paper>
+        </Box>
+      </Paper>
+    </Box>
 
   );
 }
@@ -105,9 +109,11 @@ const istypingBox: SxProps = {
   minWidth: '8rem',
   float: 'right',
   marginRight: '1rem',
+<<<<<<< HEAD
   margin: 'auto'
   position: 'fixed',
 } */
+
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
   backgroundColor: '#4D774E',
