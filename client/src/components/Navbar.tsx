@@ -12,7 +12,7 @@ import { SxProps } from '@mui/material';
 
 
 export default function Navbar() {
-  const { joinedRoom, setJoinedRoom, socket, setMessages } = useSockets();
+  const { joinedRoom, setJoinedRoom, socket, setMessages, nickname } = useSockets();
 
   function exitRoom() {
     socket.emit('leaveRoom')
@@ -41,7 +41,7 @@ export default function Navbar() {
             Chat App
           </Typography>
           <Box >
-          <Sidebar />
+          {nickname ? <Sidebar /> : null}
           </Box>
           {joinedRoom ?
             <IconButton

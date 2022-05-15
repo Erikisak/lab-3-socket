@@ -22,7 +22,7 @@ export default function CreateRoom() {
   function handleCreateRoom() {
     if (!String(roomName).trim()) return;
 
-    const createRoom = false
+    const createRoom = true
 
     //join chatroom, send username and room to server || FUNKAR
     socket.emit('joinRoom', { nickname, roomName, createRoom });

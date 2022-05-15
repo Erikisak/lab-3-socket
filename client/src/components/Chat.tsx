@@ -13,7 +13,7 @@ export default function Chat() {
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
   })
-  //get roomname and users
+  //get roomname and users VG, get roomname here instead
   //socket.on('roomUsers', ({ room, users }) => {
   //  console.log(room, users)
   //})
@@ -29,10 +29,10 @@ export default function Chat() {
     ]);
   }
 
-  const handleTyping = (e: any) => {
+  const handleTyping = () => {
     socket.emit('isTyping',);
 
-    console.log('isTyping')
+    //console.log('isTyping')
   }
 
   function handleSendMessage(e: FormEvent) {
@@ -44,59 +44,55 @@ export default function Chat() {
     }
 
     socket.emit('chatMessage', text)
-
     setNewMessage('')
   }
 
   return (
 
-      <Box>
-        <Sidebar/>
-        <Paper sx={paperStyle}>
-         
-            <Typography sx={header}>{roomName}</Typography>
-          
-          <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
-            {messages.map(({ message, username, time }, index) => {
-              return (
-                //conditional rendering checks if current user sent the message. Fix styling.
-                username === nickname ?
-                  <Paper sx={ownMessage} key={index}>
-                    <Typography sx={usernameStyle}>You</Typography>
-                    <Typography sx={messageStyle}>{message}</Typography>
-                    <Typography sx={timeStyle}>{time}</Typography>
-                  </Paper>
-                  :
-                  <Box sx={othersMessage} key={index}>
+    <Box>
+      <Sidebar />
+      <Paper sx={paperStyle}>
+        <Typography sx={header}>{roomName}</Typography>
+        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
+
+          {messages.map(({ message, username, time }, index) => {
+            return (
+              //conditional rendering checks if current user sent the message.
+              username === nickname ?
+                <Paper sx={ownMessage} key={index}>
+                  <Typography sx={usernameStyle}>You</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+                :
+                <Box sx={othersMessage} key={index}>
                   <Paper >
                     <Typography sx={usernameStyle}>{username}</Typography>
                     <Typography sx={messageStyle}>{message}</Typography>
                     <Typography sx={timeStyle}>{time}</Typography>
                   </Paper>
-                  
-                 </Box>
-               
-              )
-            })}
-            <Typography sx={istypingText} >{isTyping}</Typography>
-          </Box>
-          <Box >
-            <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
-              <TextField
-                sx={textfieldStyle}
-                multiline
-                required
-                rows={3}
-                placeholder="Type your message"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={handleTyping} />
-  
-              <Button sx={button} type="submit">send</Button>
-            </Paper>
-          </Box>
-        </Paper>
-      </Box>
+                </Box>
+            )
+          })}
+          {/* fix this */}
+          <Typography sx={istypingText} >{isTyping}</Typography>
+        </Box>
+        <Box >
+          <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
+            <TextField
+              sx={textfieldStyle}
+              multiline
+              required
+              rows={3}
+              placeholder="Type your message"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={handleTyping} />
+            <Button sx={button} type="submit">send</Button>
+          </Paper>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 
@@ -113,7 +109,7 @@ const istypingText: SxProps = {
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
   backgroundColor: '#4D774E',
-  color: 'white', 
+  color: 'white',
 }
 const timeStyle: SxProps = {
   paddingBottom: '0.3rem',
@@ -124,12 +120,6 @@ const timeStyle: SxProps = {
 const textfieldStyle: SxProps = {
   backgroundColor: 'white',
   width: '70%',
-}
-const roomname: SxProps = {
-  textAlign: 'center',
-  fontSize: '2rem',
-  paddingTop: '2rem'
-
 }
 const messageBox: SxProps = {
   position: 'fixed',
@@ -180,14 +170,4 @@ const othersMessage: SxProps = {
   marginLeft: 'auto',
   marginRight: '1rem',
 
-}
-const chatBubble: SxProps = {
-  backgroundColor: 'white',
-  width: '10rem',
-  height: '5rem',
-  paddingTop: '.5rem',
-  paddingLeft: '.5rem',
-  marginLeft: '1rem',
-  marginTop: '2rem',
-  marginBottom: '2rem'
 }

@@ -12,7 +12,6 @@ export default function Rooms() {
     return (
         !joinedRoom ?
             <>
-                <Sidebar />
                 <CreateRoom />
             </> :
             <Chat />

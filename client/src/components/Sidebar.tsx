@@ -22,20 +22,12 @@ export default function Sidebar() {
     };
 
     function handleJoinRoom(room: string) {
-        const createRoom = true
+        const createRoom = false
         socket.emit('joinRoom', ({ nickname, room, createRoom }))
         console.log('test')
     }
 
-    socket.on('roomsArray', rooms => {
-        console.log('roomsArray triggered')
-        setRoomsArray([
-            ...roomsArray,
-            {
-                roomName: rooms
-            },
-        ])
-    })
+    console.log('roomsArray: ', roomsArray)
 
     return (
 
@@ -47,7 +39,7 @@ export default function Sidebar() {
                     '&:hover': {
                         backgroundColor: '#4caf50',
                         color: '#fff',
-                    }, 
+                    },
                 }}>
                 Rooms
             </Button>
@@ -72,20 +64,8 @@ export default function Sidebar() {
                     Existing chat rooms
                 </Typography>
                 <List>
-                    {/* {
-                        roomsArray.length > 0 ?
-                            roomsArray.map((room: string) => {
-                                <ListItem key={room} disablePadding>
-                                    <ListItemButton onClick={() => handleJoinRoom(room)}>
-                                        <ListItemText primary={room} />
-                                    </ListItemButton>
-                                </ListItem>
-                            })
-                            :
-                            <ListItem>There are no rooms</ListItem>
-                    } */}
+                    {roomsArray}
                 </List>
-
             </Drawer>
         </Box >
     );

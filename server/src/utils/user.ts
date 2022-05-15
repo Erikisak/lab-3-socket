@@ -1,7 +1,6 @@
-import { log } from "./formatting";
-
 //Stores information about users. fix specific type
 const users: any[] = [];
+export const roomsArray: any[] = []
 
 //join user to chat
 export function userJoin(id: string, nickname: string, roomName: string) {
@@ -13,11 +12,10 @@ export function userJoin(id: string, nickname: string, roomName: string) {
 
 //work in progress
 export function createRoomsArray (roomName: string) {
-    const rooms: any[] = []
 
-    rooms.push(roomName)
+    roomsArray.push(roomName)
 
-    return rooms
+    return roomsArray
 }
 
 //Get current user
