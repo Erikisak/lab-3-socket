@@ -47,7 +47,7 @@ export default function Sidebar() {
                     '&:hover': {
                         backgroundColor: '#4caf50',
                         color: '#fff',
-                    }, marginTop: '5rem'
+                    }, 
                 }}>
                 Rooms
             </Button>

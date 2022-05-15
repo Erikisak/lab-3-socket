@@ -8,6 +8,7 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useSockets } from '../context/socket.context';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Sidebar from './Sidebar';
+import { SxProps } from '@mui/material';
 
 
 export default function Navbar() {
@@ -39,6 +40,9 @@ export default function Navbar() {
             sx={{ flexGrow: 1 }}>
             Chat App
           </Typography>
+          <Box >
+          <Sidebar />
+          </Box>
           {joinedRoom ?
             <IconButton
               size="large"
