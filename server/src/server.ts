@@ -3,7 +3,7 @@ import { createServer } from "http"
 import { Server } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
 import { log, formatMessage } from "./utils/formatting"
-import { userJoin, getRoomUsers, getCurrentUser, userLeave } from "./utils/user"
+import { userJoin, getRoomUsers, getCurrentUser, userLeave, createRoomsArray } from "./utils/user"
 
 
 const port = 4000
@@ -33,7 +33,8 @@ const bot = 'Server';
 // run when client connects || FUNKAR
 io.on('connection', socket => {
   log.info('user connected with id: ' + socket.id)
-  socket.on('joinRoom', ({ nickname, roomName }) => {
+
+  socket.on('joinRoom', ({ nickname, roomName, createRoom }) => {
 
     // user room || FUNKAR
     const user = userJoin(socket.id, nickname, roomName)
@@ -50,6 +51,13 @@ io.on('connection', socket => {
       room: user.roomName,
       users: getRoomUsers(user.roomName)
     });
+
+    //checks if creating room
+    if (createRoom) {
+      const rooms = createRoomsArray(roomName)
+      io.emit('roomsArray', rooms)
+      console.log('create room recieved ' + rooms)
+    }
   });
 
   socket.on("isTyping", () => {

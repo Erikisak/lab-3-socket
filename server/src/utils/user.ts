@@ -1,3 +1,5 @@
+import { log } from "./formatting";
+
 //Stores information about users. fix specific type
 const users: any[] = [];
 
@@ -7,6 +9,15 @@ export function userJoin(id: string, nickname: string, roomName: string) {
     users.push(user);
 
     return user;
+}
+
+//work in progress
+export function createRoomsArray (roomName: string) {
+    const rooms: any[] = []
+
+    rooms.push(roomName)
+
+    return rooms
 }
 
 //Get current user
@@ -22,6 +33,7 @@ export function userLeave(id: string) {
         return users.splice(index, 1)[0];
     }
 }
+
 
 // get room users
 export function getRoomUsers(room: string) {

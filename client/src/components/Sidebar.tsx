@@ -1,4 +1,4 @@
-import { Paper, SxProps, Typography, Button, Grid, Drawer, IconButton, Box } from "@mui/material";
+import { Paper, SxProps, Typography, Button, Grid, Drawer, IconButton, Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { useState } from "react";
 import { styled, } from "@mui/system";
 import CloseIcon from '@mui/icons-material/Close';
@@ -7,7 +7,9 @@ import { useSockets } from "../context/socket.context";
 
 
 export default function Sidebar() {
-    const { roomName } = useSockets()
+    const { socket, nickname, roomName, roomsArray, setRoomsArray } = useSockets()
+    //use to render "there are no rooms" text
+    const [roomsExist, setRoomsExist] = useState(false)
 
     //Drawer
     const [open, setOpen] = useState(false);
@@ -19,11 +21,21 @@ export default function Sidebar() {
         setOpen(false);
     };
 
-    /* function handleJoinRoom(key: string | undefined) {
-        if (key === roomId) return;
-        socket.emit(EVENTS.CLIENT.JOIN_ROOM, key);
-    } */
+    function handleJoinRoom(room: string) {
+        const createRoom = true
+        socket.emit('joinRoom', ({ nickname, room, createRoom }))
+        console.log('test')
+    }
 
+    socket.on('roomsArray', rooms => {
+        console.log('roomsArray triggered')
+        setRoomsArray([
+            ...roomsArray,
+            {
+                roomName: rooms
+            },
+        ])
+    })
 
     return (
 
@@ -59,11 +71,23 @@ export default function Sidebar() {
                 <Typography sx={drawerText}>
                     Existing chat rooms
                 </Typography>
-                <Paper sx={roomStyle}>
-                    <Button>{roomName}</Button>
-                </Paper>
+                <List>
+                    {/* {
+                        roomsArray.length > 0 ?
+                            roomsArray.map((room: string) => {
+                                <ListItem key={room} disablePadding>
+                                    <ListItemButton onClick={() => handleJoinRoom(room)}>
+                                        <ListItemText primary={room} />
+                                    </ListItemButton>
+                                </ListItem>
+                            })
+                            :
+                            <ListItem>There are no rooms</ListItem>
+                    } */}
+                </List>
+
             </Drawer>
-        </Box>
+        </Box >
     );
 }
 
