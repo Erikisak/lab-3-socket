@@ -1,6 +1,6 @@
 import { SxProps, Typography, TextField, Box, Button, Drawer, IconButton } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { styled, } from "@mui/system";
 import CloseIcon from '@mui/icons-material/Close';
 import { useSockets } from "../context/socket.context";
@@ -8,7 +8,7 @@ import '../style.css'
 
 
 export default function CreateRoom() {
-  const { socket, nickname, setJoinedRoom, roomName, setRoomName } = useSockets();
+  const { socket, nickname, setJoinedRoom, roomName, setRoomName, roomsObject } = useSockets();
 
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -19,14 +19,25 @@ export default function CreateRoom() {
     setOpenDelete(false);
   };
 
-  function handleCreateRoom() {
-    if (!String(roomName).trim()) return;
+  function handleCreateRoom(e: FormEvent) {
+    e.preventDefault()
+    let doubleCheck = Object.keys(roomsObject).filter((key) => key === roomName)
 
-    const createRoom = true
+    if (!String(roomName).trim()) {
+      alert('The name of a room can not be blank')
+      return;
+    } else if (doubleCheck.length > 0) {
+      alert('This name is taken')
+      return;
+    }
+    else {
+      const createRoom = true
 
-    //join chatroom, send username and room to server || FUNKAR
-    socket.emit('joinRoom', { nickname, roomName, createRoom });
-    setJoinedRoom(true)
+      //join chatroom, send username and room to server || FUNKAR
+      socket.emit('joinRoom', { nickname, roomName, createRoom });
+      setJoinedRoom(true)
+    }
+
   }
 
   return (

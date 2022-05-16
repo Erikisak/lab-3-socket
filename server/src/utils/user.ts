@@ -1,6 +1,6 @@
 //Stores information about users. fix specific type
 const users: any[] = [];
-export const roomsArray: any[] = []
+export const roomsObject: Record<string, { name: string }> = {};
 
 //join user to chat
 export function userJoin(id: string, nickname: string, roomName: string) {
@@ -11,11 +11,16 @@ export function userJoin(id: string, nickname: string, roomName: string) {
 }
 
 //work in progress
-export function createRoomsArray (roomName: string) {
+export function createRoomsObject (roomName: string) {
+    console.log(roomsObject)
 
-    roomsArray.push(roomName)
+    roomsObject[roomName] = {
+        name: roomName
+    }
 
-    return roomsArray
+    console.log(roomsObject)
+
+    return roomsObject
 }
 
 //Get current user

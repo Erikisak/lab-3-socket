@@ -1,15 +1,15 @@
 import { Paper, SxProps, Typography, Button, Grid, Drawer, IconButton, Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { styled, } from "@mui/system";
 import CloseIcon from '@mui/icons-material/Close';
 import '../style.css'
 import { useSockets } from "../context/socket.context";
+import { SettingsPowerSharp } from "@mui/icons-material";
 
 
 export default function Sidebar() {
-    const { socket, nickname, roomName, roomsArray, setRoomsArray } = useSockets()
+    const { socket, nickname, setJoinedRoom, setRoomName, roomsObject, roomsExist, setMessages } = useSockets()
     //use to render "there are no rooms" text
-    const [roomsExist, setRoomsExist] = useState(false)
 
     //Drawer
     const [open, setOpen] = useState(false);
@@ -22,12 +22,13 @@ export default function Sidebar() {
     };
 
     function handleJoinRoom(room: string) {
+        setMessages([])
+        setRoomName(room)
+        const roomName = room
         const createRoom = false
-        socket.emit('joinRoom', ({ nickname, room, createRoom }))
-        console.log('test')
+        socket.emit('joinRoom', ({ nickname, roomName, createRoom }))
+        setJoinedRoom(true)
     }
-
-    console.log('roomsArray: ', roomsArray)
 
     return (
 
@@ -61,10 +62,18 @@ export default function Sidebar() {
                     </IconButton>
                 </DrawerHeader>
                 <Typography sx={drawerText}>
-                    Existing chat rooms
+                    {roomsExist ? 'Chat rooms' : 'There are no rooms'}
                 </Typography>
                 <List>
-                    {roomsArray}
+                    {Object.keys(roomsObject).map((key, index) => {
+                        return (
+                            <ListItem key={index} disablePadding>
+                                <ListItemButton sx={button} onClick={() => handleJoinRoom(key)}>
+                                    <ListItemText primary={key} />
+                                </ListItemButton>
+                            </ListItem>
+                        )
+                    })}
                 </List>
             </Drawer>
         </Box >
@@ -77,7 +86,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-start',
 }));
 const drawerText: SxProps = {
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
     textAlign: 'center',
+    padding: '1rem',
     fontSize: '1.5rem',
     marginTop: '2rem'
 }
@@ -85,6 +96,16 @@ const iconStyle: SxProps = {
     fontSize: '2rem',
     color: 'black',
     float: 'right'
+}
+const button: SxProps = {
+    margin: '.3rem 0',
+    boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+    backgroundColor: '#4D774E',
+    color: 'white',
+    '&:hover': {
+        backgroundColor: '#4caf50',
+        color: '#fff',
+    },
 }
 const roomStyle: SxProps = {
     height: '6rem',

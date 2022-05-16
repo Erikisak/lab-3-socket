@@ -26,12 +26,16 @@ export default function Chat() {
         message: incomingMessage.text,
         time: incomingMessage.time
       },
-    ]);
+    ])
+    const chatBox = document.getElementById('chatBox')
+    if(chatBox){
+    chatBox.scrollIntoView({ behavior: "smooth", block: "end" });}
+    console.log(chatBox)
+    ;
   }
 
   const handleTyping = () => {
     socket.emit('isTyping',);
-
     //console.log('isTyping')
   }
 
@@ -49,7 +53,7 @@ export default function Chat() {
 
   return (
 
-    <Box>
+    <Box id='chatBox' sx={{paddingBottom: '4rem'}}>
       <Sidebar />
       <Paper sx={paperStyle}>
         <Typography sx={header}>{roomName}</Typography>

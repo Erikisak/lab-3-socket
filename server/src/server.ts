@@ -3,7 +3,7 @@ import { createServer } from "http"
 import { Server } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
 import { log, formatMessage } from "./utils/formatting"
-import { userJoin, getRoomUsers, getCurrentUser, userLeave, createRoomsArray, roomsArray } from "./utils/user"
+import { userJoin, getRoomUsers, getCurrentUser, userLeave, createRoomsObject, roomsObject } from "./utils/user"
 
 
 const port = 4000
@@ -33,32 +33,66 @@ const bot = 'Server';
 // run when client connects || FUNKAR
 io.on('connection', socket => {
   log.info('user connected with id: ' + socket.id)
-  socket.emit('roomsArray', roomsArray)
+  socket.emit('roomsObject', roomsObject)
 
   socket.on('joinRoom', ({ nickname, roomName, createRoom }) => {
-
-    // user room || FUNKAR
-    const user = userJoin(socket.id, nickname, roomName)
-    socket.join(user.roomName)
-
-    // notifies only to the user, welcomes current user. BUG: console logs twice, clientside issue || CURRENT
-    socket.emit('message', formatMessage(bot, `Welcome to ${roomName}`));
-
-    // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
-    socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has connected to the chat`));
-
-    //Send user room info || FUNKAR
-    io.to(user.roomName).emit('roomUsers', {
-      room: user.roomName,
-      users: getRoomUsers(user.roomName)
-    });
-
     //checks if creating room
     if (createRoom) {
-      const rooms = createRoomsArray(roomName)
-      io.emit('roomsArray', rooms)
-      console.log('create room recieved ' + rooms)
+
+      
+      const rooms = createRoomsObject(roomName)
+      io.emit('roomsObject', rooms)
+      console.log('create room recieved ' + roomName)
+      
+      // user room || FUNKAR
+      const user = userJoin(socket.id, nickname, roomName)
+      socket.join(user.roomName)
+      
+      // notifies only to the user, welcomes current user. BUG: console logs twice, clientside issue || CURRENT
+      socket.emit('message', formatMessage(bot, `Welcome to ${roomName}`));
+      
+      // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
+      socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has connected to the chat`));
+
+      //Send user room info || FUNKAR
+      io.to(user.roomName).emit('roomUsers', {
+        room: user.roomName,
+        users: getRoomUsers(user.roomName)
+      });
+      return
+    } else {
+
+      const leaver = userLeave(socket.id);
+
+      // FUNKAR
+      if (leaver) {
+        io.to(leaver.roomName).emit('message', formatMessage(bot, `${leaver.nickname} has left the chat`));
+        //Send leaver room info
+        io.to(leaver.roomName).emit('roomUsers', {
+          room: leaver.roomName,
+          users: getRoomUsers(leaver.roomName)
+        });
+      }
+      
+      console.log('Join room recieved ' + roomName)
+
+      // user room || FUNKAR
+      const user = userJoin(socket.id, nickname, roomName)
+      socket.join(user.roomName)
+
+      // notifies only to the user, welcomes current user. BUG: console logs twice, clientside issue || CURRENT
+      socket.emit('message', formatMessage(bot, `Welcome to ${roomName}`));
+
+      // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
+      socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has connected to the chat`));
+
+      //Send user room info || FUNKAR
+      io.to(user.roomName).emit('roomUsers', {
+        room: user.roomName,
+        users: getRoomUsers(user.roomName)
+      });
     }
+
   });
 
   socket.on("isTyping", () => {
@@ -79,6 +113,8 @@ io.on('connection', socket => {
   socket.on('leaveRoom', () => {
     const user = userLeave(socket.id);
 
+    //check if room empty, if so then remove room and emit new roomObject
+
     if (user) {
       socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has left the chat`));
       //Send user room info
@@ -92,6 +128,8 @@ io.on('connection', socket => {
   //Runs when user disconnects || Funkar
   socket.on('disconnect', () => {
     log.info('user disconnected')
+
+    //check if room empty, if so then remove room and emit new roomObject
 
     const user = userLeave(socket.id);
 
