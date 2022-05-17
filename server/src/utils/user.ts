@@ -11,14 +11,10 @@ export function userJoin(id: string, nickname: string, roomName: string) {
 }
 
 //work in progress
-export function createRoomsObject (roomName: string) {
-    console.log(roomsObject)
-
+export function createRoomsObject(roomName: string) {
     roomsObject[roomName] = {
         name: roomName
     }
-
-    console.log(roomsObject)
 
     return roomsObject
 }
@@ -37,10 +33,14 @@ export function userLeave(id: string) {
     }
 }
 
-
 // get room users
 export function getRoomUsers(room: string) {
+    const usersRoom = users.filter(user => user.roomName === room);
 
-    return users.filter(user => user.roomName === room);
+    if (usersRoom.length === 0) {
+        delete roomsObject[room]
+    }
+
+    return usersRoom
 }
 

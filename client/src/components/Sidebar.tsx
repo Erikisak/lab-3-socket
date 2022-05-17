@@ -15,7 +15,12 @@ export default function Sidebar() {
     const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        if (open) {
+            setOpen(false);
+            return;
+        } else {
+            setOpen(true);
+        }
     };
     const handleDrawerClose = () => {
         setOpen(false);
@@ -36,7 +41,7 @@ export default function Sidebar() {
             <Button
                 onClick={handleDrawerOpen}
                 sx={{
-                    ...(open && { display: 'none' }), backgroundColor: '#4D774E', color: 'white',
+                    backgroundColor: '#4D774E', color: 'white',
                     '&:hover': {
                         backgroundColor: '#4caf50',
                         color: '#fff',

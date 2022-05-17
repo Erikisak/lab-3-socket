@@ -28,10 +28,9 @@ export default function Chat() {
       },
     ])
     const chatBox = document.getElementById('chatBox')
-    if(chatBox){
-    chatBox.scrollIntoView({ behavior: "smooth", block: "end" });}
-    console.log(chatBox)
-    ;
+    if (chatBox) {
+      chatBox.scrollIntoView({ behavior: "smooth", block: "end" });
+    };
   }
 
   const handleTyping = () => {
@@ -53,7 +52,7 @@ export default function Chat() {
 
   return (
 
-    <Box id='chatBox' sx={{paddingBottom: '4rem'}}>
+    <Box id='chatBox'>
       <Sidebar />
       <Paper sx={paperStyle}>
         <Typography sx={header}>{roomName}</Typography>
@@ -69,13 +68,11 @@ export default function Chat() {
                   <Typography sx={timeStyle}>{time}</Typography>
                 </Paper>
                 :
-                <Box sx={othersMessage} key={index}>
-                  <Paper >
-                    <Typography sx={usernameStyle}>{username}</Typography>
-                    <Typography sx={messageStyle}>{message}</Typography>
-                    <Typography sx={timeStyle}>{time}</Typography>
-                  </Paper>
-                </Box>
+                <Paper sx={othersMessage} key={index}>
+                  <Typography sx={usernameStyle}>{username}</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
             )
           })}
           {/* fix this */}
@@ -103,13 +100,9 @@ export default function Chat() {
 const messageStyle: SxProps = {
   padding: '0.3rem 0.5rem',
 }
-// const istypingText: SxProps = {
-// position: 'absolute'
-// }
 const istypingText: SxProps = {
   marginTop: '2rem'
 }
-
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
   backgroundColor: '#4D774E',
@@ -139,18 +132,18 @@ const messageBox: SxProps = {
 }
 const paperStyle: SxProps = {
   backgroundColor: '#E5F6DF',
-
-  minHeight: '40rem',
   height: '100%',
+  minHeight: '100vh',
   width: '100%',
   maxWidth: '60rem',
   marginLeft: 'auto',
   marginRight: 'auto'
 }
 const header: SxProps = {
+  paddingTop: '2rem',
+  wordWrap: 'break-word',
   textAlign: 'center',
   fontSize: '2.5rem',
-  marginTop: '5rem'
 }
 const button: SxProps = {
   color: '#fff',

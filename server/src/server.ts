@@ -42,7 +42,6 @@ io.on('connection', socket => {
       
       const rooms = createRoomsObject(roomName)
       io.emit('roomsObject', rooms)
-      console.log('create room recieved ' + roomName)
       
       // user room || FUNKAR
       const user = userJoin(socket.id, nickname, roomName)
@@ -54,12 +53,8 @@ io.on('connection', socket => {
       // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
       socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has connected to the chat`));
 
-      //Send user room info || FUNKAR
-      io.to(user.roomName).emit('roomUsers', {
-        room: user.roomName,
-        users: getRoomUsers(user.roomName)
-      });
       return
+
     } else {
 
       const leaver = userLeave(socket.id);
@@ -74,8 +69,6 @@ io.on('connection', socket => {
         });
       }
       
-      console.log('Join room recieved ' + roomName)
-
       // user room || FUNKAR
       const user = userJoin(socket.id, nickname, roomName)
       socket.join(user.roomName)
@@ -91,6 +84,9 @@ io.on('connection', socket => {
         room: user.roomName,
         users: getRoomUsers(user.roomName)
       });
+
+      socket.emit('roomsObject', roomsObject)
+
     }
 
   });
@@ -104,8 +100,6 @@ io.on('connection', socket => {
   //Listen for message. this is where you send the msg to the client || Funkar
   socket.on('chatMessage', msg => {
     const user = getCurrentUser(socket.id);
-    //works
-    log.info(formatMessage(user.nickname, msg))
 
     io.to(user.roomName).emit('message', formatMessage(user.nickname, msg));
   });
@@ -113,15 +107,20 @@ io.on('connection', socket => {
   socket.on('leaveRoom', () => {
     const user = userLeave(socket.id);
 
-    //check if room empty, if so then remove room and emit new roomObject
-
+    
     if (user) {
+      //check if room empty, if so then remove room and emit new roomObject
+
       socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has left the chat`));
       //Send user room info
       socket.broadcast.to(user.roomName).emit('roomUsers', {
         room: user.roomName,
         users: getRoomUsers(user.roomName)
       });
+
+      //emit new roomsObject
+      socket.emit('roomsObject', roomsObject)
+
     }
   })
 
@@ -129,18 +128,22 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     log.info('user disconnected')
 
-    //check if room empty, if so then remove room and emit new roomObject
-
     const user = userLeave(socket.id);
 
     // FUNKAR
     if (user) {
+      //check if room empty, if so then remove room and emit new roomObject
+
       io.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has left the chat`));
       //Send user room info
       io.to(user.roomName).emit('roomUsers', {
         room: user.roomName,
         users: getRoomUsers(user.roomName)
       });
+
+      //emit new roomsObject
+      socket.emit('roomsObject', roomsObject)
+
     }
   });
 });
