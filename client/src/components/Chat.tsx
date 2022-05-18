@@ -12,6 +12,7 @@ export default function Chat() {
   //recieve messages from from all.
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
+    console.log(incomingMessage)
   })
   //get roomname and users VG, get roomname here instead
   //socket.on('roomUsers', ({ room, users }) => {
@@ -34,7 +35,7 @@ export default function Chat() {
   }
 
   const handleTyping = () => {
-    socket.emit('isTyping',);
+    socket.emit('isTyping')
   }
 
   function handleSendMessage(e: FormEvent) {

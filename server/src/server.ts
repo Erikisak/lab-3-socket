@@ -3,7 +3,7 @@ import { createServer } from "http"
 import { Server } from "socket.io"
 //Replaces console logging cause its faster, but unneccessary probably
 import { log, formatMessage } from "./utils/formatting"
-import { userJoin, getRoomUsers, getCurrentUser, userLeave, createRoomsObject, roomsObject } from "./utils/user"
+import { userJoin, getRoomUsers, getCurrentUser, userLeave, createRoomsObject, roomsObject, createNamesObject, namesObject } from "./utils/user"
 
 
 const port = 4000
@@ -29,27 +29,36 @@ httpServer.listen(port, host, () => {
 })
 
 const bot = 'Server';
+let nickname: string;
 
 // run when client connects || FUNKAR
 io.on('connection', socket => {
   log.info('user connected with id: ' + socket.id)
   socket.emit('roomsObject', roomsObject)
+  socket.emit('namesObject', namesObject)
 
-  socket.on('joinRoom', ({ nickname, roomName, createRoom }) => {
+  socket.on('nameSubmit', value => {
+    //create nickname object, emit nickname object to all
+    nickname = value
+    createNamesObject(value)
+    io.emit('namesObject', namesObject)
+  })
+
+  socket.on('joinRoom', ({ roomName, createRoom }) => {
     //checks if creating room
     if (createRoom) {
 
-      
+
       const rooms = createRoomsObject(roomName)
       io.emit('roomsObject', rooms)
-      
+
       // user room || FUNKAR
       const user = userJoin(socket.id, nickname, roomName)
       socket.join(user.roomName)
-      
+
       // notifies only to the user, welcomes current user. BUG: console logs twice, clientside issue || CURRENT
       socket.emit('message', formatMessage(bot, `Welcome to ${roomName}`));
-      
+
       // Broadcast when a user connects. notifies everyone except the user connecting. || FUNKAR
       socket.broadcast.to(user.roomName).emit('message', formatMessage(bot, `${user.nickname} has connected to the chat`));
 
@@ -68,7 +77,7 @@ io.on('connection', socket => {
           users: getRoomUsers(leaver.roomName)
         });
       }
-      
+
       // user room || FUNKAR
       const user = userJoin(socket.id, nickname, roomName)
       socket.join(user.roomName)
@@ -107,7 +116,7 @@ io.on('connection', socket => {
   socket.on('leaveRoom', () => {
     const user = userLeave(socket.id);
 
-    
+
     if (user) {
       //check if room empty, if so then remove room and emit new roomObject
 

@@ -31,7 +31,7 @@ export default function Sidebar() {
         setRoomName(room)
         const roomName = room
         const createRoom = false
-        socket.emit('joinRoom', ({ nickname, roomName, createRoom }))
+        socket.emit('joinRoom', ({ roomName, createRoom }))
         setJoinedRoom(true)
     }
 

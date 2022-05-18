@@ -13,6 +13,7 @@ interface ContextInterface {
     joinedRoom: boolean;
     setJoinedRoom: Function;
     roomsObject: object;
+    namesObject: object;
     roomName: string;
     setRoomName: Function;
     messages: { message: string; username: string; time: string }[];
@@ -27,7 +28,8 @@ const SocketContext = createContext<ContextInterface>({
     setNickname: () => false,
     joinedRoom: false,
     setJoinedRoom: () => false,
-    roomsObject: [],
+    roomsObject: {},
+    namesObject: {},
     roomName: '',
     setRoomName: () => false,
     messages: [],
@@ -40,20 +42,21 @@ export default function SocketsProvider(props: any) {
     const [nickname, setNickname] = useState('');
     const [roomName, setRoomName] = useState("");
     const [joinedRoom, setJoinedRoom] = useState(false);
-    const [roomsObject, setRoomsObject] = useState([]);
+    const [roomsObject, setRoomsObject] = useState({});
+    const [namesObject, setNamesObject] = useState({});
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState<string>('');
     const [roomsExist, setRoomsExist] = useState(false)
 
     socket.on('isTyping', (username: string) => {
         if (username) setIsTyping(`${username} is typing...`);
-        setTimeout(() => setIsTyping(''), 2000);
+        setTimeout(() => setIsTyping(''), 3000);
+        console.log('recieving isTypinh')
     });
 
     socket.on('roomsObject', rooms => {
         setRoomsObject(rooms)
-        console.log(roomsObject)
-        
+
         if (Object.keys(rooms).length > 0) {
             setRoomsExist(true)
         } else {
@@ -62,6 +65,11 @@ export default function SocketsProvider(props: any) {
         }
     })
 
+    socket.on('namesObject', value => {
+        setNamesObject(value)
+    })
+    console.log(namesObject)
+    
     return (
         <SocketContext.Provider
             value={{
@@ -71,6 +79,7 @@ export default function SocketsProvider(props: any) {
                 joinedRoom,
                 setJoinedRoom,
                 roomsObject,
+                namesObject,
                 setNickname,
                 roomsExist,
                 setRoomName,
