@@ -52,7 +52,8 @@ export default function SocketsProvider(props: any) {
 
     socket.on('roomsObject', rooms => {
         setRoomsObject(rooms)
-
+        console.log(roomsObject)
+        
         if (Object.keys(rooms).length > 0) {
             setRoomsExist(true)
         } else {

@@ -35,7 +35,6 @@ export default function Chat() {
 
   const handleTyping = () => {
     socket.emit('isTyping',);
-    //console.log('isTyping')
   }
 
   function handleSendMessage(e: FormEvent) {

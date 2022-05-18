@@ -119,7 +119,7 @@ io.on('connection', socket => {
       });
 
       //emit new roomsObject
-      socket.emit('roomsObject', roomsObject)
+      io.emit('roomsObject', roomsObject)
 
     }
   })
@@ -142,7 +142,7 @@ io.on('connection', socket => {
       });
 
       //emit new roomsObject
-      socket.emit('roomsObject', roomsObject)
+      io.emit('roomsObject', roomsObject)
 
     }
   });
