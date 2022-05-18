@@ -34,7 +34,7 @@ export default function CreateRoom() {
       const createRoom = true
 
       //join chatroom, send username and room to server || FUNKAR
-      socket.emit('joinRoom', { roomName, createRoom });
+      socket.emit('joinRoom', { nickname, roomName, createRoom });
       setJoinedRoom(true)
     }
 

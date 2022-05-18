@@ -51,7 +51,6 @@ export default function SocketsProvider(props: any) {
     socket.on('isTyping', (username: string) => {
         if (username) setIsTyping(`${username} is typing...`);
         setTimeout(() => setIsTyping(''), 3000);
-        console.log('recieving isTypinh')
     });
 
     socket.on('roomsObject', rooms => {
@@ -68,7 +67,6 @@ export default function SocketsProvider(props: any) {
     socket.on('namesObject', value => {
         setNamesObject(value)
     })
-    console.log(namesObject)
     
     return (
         <SocketContext.Provider

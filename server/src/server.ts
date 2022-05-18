@@ -29,7 +29,6 @@ httpServer.listen(port, host, () => {
 })
 
 const bot = 'Server';
-let nickname: string;
 
 // run when client connects || FUNKAR
 io.on('connection', socket => {
@@ -39,12 +38,11 @@ io.on('connection', socket => {
 
   socket.on('nameSubmit', value => {
     //create nickname object, emit nickname object to all
-    nickname = value
     createNamesObject(value)
     io.emit('namesObject', namesObject)
   })
 
-  socket.on('joinRoom', ({ roomName, createRoom }) => {
+  socket.on('joinRoom', ({ nickname, roomName, createRoom }) => {
     //checks if creating room
     if (createRoom) {
 
