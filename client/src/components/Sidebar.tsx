@@ -1,15 +1,13 @@
-import { Paper, SxProps, Typography, Button, Grid, Drawer, IconButton, Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { SxProps, Typography, Button, Drawer, IconButton, Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { useState } from "react";
 import { styled, } from "@mui/system";
 import CloseIcon from '@mui/icons-material/Close';
 import '../style.css'
 import { useSockets } from "../context/socket.context";
-import { SettingsPowerSharp } from "@mui/icons-material";
 
 
 export default function Sidebar() {
-    const { socket, nickname, setJoinedRoom, setRoomName, roomsObject, roomsExist, setMessages } = useSockets()
-    //use to render "there are no rooms" text
+    const { socket, nickname, setJoinedRoom, setRoomName, roomName, roomsObject, roomsExist, setMessages } = useSockets()
 
     //Drawer
     const [open, setOpen] = useState(false);
@@ -36,7 +34,6 @@ export default function Sidebar() {
     }
 
     return (
-
         <Box>
             <Button
                 onClick={handleDrawerOpen}
@@ -73,9 +70,15 @@ export default function Sidebar() {
                     {Object.keys(roomsObject).map((key, index) => {
                         return (
                             <ListItem key={index} disablePadding>
-                                <ListItemButton sx={button} onClick={() => handleJoinRoom(key)}>
-                                    <ListItemText primary={key} />
-                                </ListItemButton>
+                                {roomName === key ?
+                                    <ListItemButton disabled sx={button} >
+                                        <ListItemText primary={key} />
+                                    </ListItemButton>
+                                    :
+                                    <ListItemButton sx={button} onClick={() => handleJoinRoom(key)}>
+                                        <ListItemText primary={key} />
+                                    </ListItemButton>
+                                }
                             </ListItem>
                         )
                     })}
@@ -112,7 +115,4 @@ const button: SxProps = {
         color: '#fff',
     },
 }
-const roomStyle: SxProps = {
-    height: '6rem',
-    marginTop: '2rem'
-}
+

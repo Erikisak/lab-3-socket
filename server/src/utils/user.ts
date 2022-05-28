@@ -11,7 +11,6 @@ export function userJoin(id: string, nickname: string, roomName: string) {
     return user;
 }
 
-
 export function createRoomsObject(roomName: string) {
     roomsObject[roomName] = {
         name: roomName
@@ -28,16 +27,13 @@ export function createNamesObject(nickname: string) {
     return roomsObject
 }
 
-//Get current user. Broken, sometimes returns wrong nickname, but always correct id????
+//Get current user.
 export function getCurrentUser(id: string) {
     const found = users.find(user => user.id === id);
-    console.log('id recieved from socket: ', id)
-    console.log('id recieved from user.id: ', users.map(user => user.id))
-    console.log('found item: ', found)
     return found
 }
 
-//User leaves chat
+//User leaves chat, something isnt right here
 export function userLeave(id: string) {
     const index = users.findIndex(user => user.id === id);
 
@@ -46,7 +42,7 @@ export function userLeave(id: string) {
     }
 }
 
-// get room users
+// get room users and remove room if empty
 export function getRoomUsers(room: string) {
     const usersRoom = users.filter(user => user.roomName === room);
 

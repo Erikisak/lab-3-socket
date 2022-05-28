@@ -1,5 +1,5 @@
 import io, { Socket } from "socket.io-client"
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react"
 
 
 //enables interaction between client and server
@@ -67,7 +67,7 @@ export default function SocketsProvider(props: any) {
     socket.on('namesObject', value => {
         setNamesObject(value)
     })
-    
+
     return (
         <SocketContext.Provider
             value={{

@@ -1,11 +1,11 @@
-import { Paper, SxProps, Typography, TextField, Box, Button, Grid } from "@mui/material";
+import { Paper, SxProps, Typography, TextField, Button, Grid } from "@mui/material";
 import { FormEvent, useState } from "react";
 import { useSockets } from "../context/socket.context";
 import '../style.css'
 
 export default function Homepage() {
     const [inputValue, setinputValue] = useState('')
-    const { socket, nickname, setNickname, namesObject } = useSockets()
+    const { socket, setNickname, namesObject } = useSockets()
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault()
@@ -57,7 +57,6 @@ export default function Homepage() {
         </Grid>
     );
 }
-
 
 const paper: SxProps = {
     background: '',

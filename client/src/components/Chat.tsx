@@ -8,13 +8,12 @@ export default function Chat() {
   const { socket, messages, roomName, nickname, setMessages, isTyping } = useSockets()
   const [newMessage, setNewMessage] = useState('')
 
-
   //recieve messages from from all.
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
-    console.log(incomingMessage)
   })
-  //get roomname and users VG, get roomname here instead
+
+  //get roomname and users for VG
   //socket.on('roomUsers', ({ room, users }) => {
   //  console.log(room, users)
   //})
@@ -51,13 +50,11 @@ export default function Chat() {
   }
 
   return (
-
     <Box id='chatBox'>
       <Sidebar />
       <Paper sx={paperStyle}>
         <Typography sx={header}>{roomName}</Typography>
-        <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
-
+        <Box sx={boxStyle}>
           {messages.map(({ message, username, time }, index) => {
             return (
               //conditional rendering checks if current user sent the message.
@@ -75,7 +72,6 @@ export default function Chat() {
                 </Paper>
             )
           })}
-          {/* fix this */}
           <Typography sx={istypingText} >{isTyping}</Typography>
         </Box>
         <Box >
@@ -97,6 +93,12 @@ export default function Chat() {
   );
 }
 
+const boxStyle: SxProps = {
+  display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  paddingBottom: '10rem'
+}
 const messageStyle: SxProps = {
   padding: '0.3rem 0.5rem',
 }

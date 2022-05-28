@@ -37,16 +37,13 @@ export default function CreateRoom() {
       socket.emit('joinRoom', { nickname, roomName, createRoom });
       setJoinedRoom(true)
     }
-
   }
 
   return (
-
     <Box sx={middle}>
       <Typography sx={welcome}>
         {nickname}, welcome to Chat App!
       </Typography>
-
       <Box sx={createRoomStyle}>
         <Typography sx={header}>
           CREATE ROOM
@@ -66,9 +63,9 @@ export default function CreateRoom() {
             <CloseIcon sx={iconStyle} />
           </IconButton>
         </DrawerHeader>
-          <Typography sx={drawerText2}>
-            Your room name
-          </Typography>
+        <Typography sx={drawerText2}>
+          Your room name
+        </Typography>
         <Box component='form' onSubmit={handleCreateRoom}>
           <TextField
             autoComplete="off"
@@ -89,8 +86,6 @@ export default function CreateRoom() {
               Create
             </Button>
           </Box>
-        </Box>
-        <Box>
         </Box>
       </Drawer>
     </Box>
