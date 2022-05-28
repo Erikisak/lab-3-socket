@@ -8,6 +8,6 @@ Erik Isaksson, Philip Risberg.
 
 ## Run the project
 1. open and split the terminal.
-2. navigate to "lab-3-socket-chat\client" in one section of the terminal and "lab-3-socket-chat\Server" in the other.
+2. navigate to "lab-3-socket-chat\client" in one section of the terminal and "lab-3-socket-chat\server" in the other.
 3. run "npm i" in both sections of the terminal.
 4. run "npm start" in both sections of the terminal.
