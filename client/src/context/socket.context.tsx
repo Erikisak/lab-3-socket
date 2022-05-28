@@ -1,5 +1,5 @@
 import io, { Socket } from "socket.io-client"
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react"
 
 
 //enables interaction between client and server
@@ -10,96 +10,63 @@ interface ContextInterface {
     socket: Socket;
     nickname: string;
     setNickname: Function;
-    roomId: string;
-    rooms: object;
     joinedRoom: boolean;
     setJoinedRoom: Function;
+    roomsObject: object;
+    namesObject: object;
     roomName: string;
     setRoomName: Function;
-    messages: { message: string; username: string; time: string }[] ;
+    messages: { message: string; username: string; time: string }[];
     setMessages: Function;
     isTyping: string;
+    roomsExist: boolean;
 }
 
 const SocketContext = createContext<ContextInterface>({
-    socket, nickname: '',
+    socket,
+    nickname: '',
     setNickname: () => false,
-    roomId: '',
-    rooms: {},
     joinedRoom: false,
     setJoinedRoom: () => false,
+    roomsObject: {},
+    namesObject: {},
     roomName: '',
     setRoomName: () => false,
-    messages: [], 
+    messages: [],
     setMessages: () => false,
     isTyping: '',
+    roomsExist: false,
 })
-
-export type IOSocket = typeof socket;
 
 export default function SocketsProvider(props: any) {
     const [nickname, setNickname] = useState('');
-    const [roomId, setRoomId] = useState("");
     const [roomName, setRoomName] = useState("");
-    const [rooms, setRooms] = useState([]);
     const [joinedRoom, setJoinedRoom] = useState(false);
+    const [roomsObject, setRoomsObject] = useState({});
+    const [namesObject, setNamesObject] = useState({});
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState<string>('');
+    const [roomsExist, setRoomsExist] = useState(false)
 
-    /*
-        //recieves room and users
-        socket.on('roomUsers', ({ room, users }) => {
-            outputRoomName(room);
-            outputUsers(users);
-        })
-    
-         //Message from server, chat component
-        socket.on('message', message => {
-            console.log(message)
-            outputMessage(message);
-    
-            //scroll down when new message posted
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }) */
+    socket.on('isTyping', (username: string) => {
+        if (username) setIsTyping(`${username} is typing...`);
+        setTimeout(() => setIsTyping(''), 3000);
+    });
 
-    /*     //Message submit, sends message to server, chat component
-        chatForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-    
-            // get message from input value. msg=input id
-            const msg = e.target.elements.msg.value;
-    
-            // emit message to server
-            socket.emit('chatMessage', msg);
-    
-            //clear input & focus input
-            e.target.elements.msg.value = '';
-            e.target.elements.msg.focus();
-        }) */
+    socket.on('roomsObject', rooms => {
+        setRoomsObject(rooms)
 
-    /*     //add roomname to dom, need this for list of rooms and as a header?
-        function outputRoomName(room) {
-            roomName.innerText = room;
-        } */
+        if (Object.keys(rooms).length > 0) {
+            setRoomsExist(true)
+        } else {
+            setRoomsExist(false)
+            return
+        }
+    })
 
-    /*     //add users to dom, do this inside a sidebar component
-        function outputUsers(users) {
-            userList.innerHTML = `
-        ${users.map(user => `<li>${user.username}</li>`).join('')}
-        `
-        } */
-
-    /*     socket.on(EVENTS.SERVER.ROOMS, (value) => {
-            setRooms(value);
-        }); */
-            
-        
-          socket.on('isTyping', (username: string) => {
-            if (username) setIsTyping(`${username} is typing...`);
-            setTimeout(() => setIsTyping(''), 2000);
-          });
-        
-
+    socket.on('namesObject', value => {
+        setNamesObject(value)
+    })
 
     return (
         <SocketContext.Provider
@@ -107,13 +74,14 @@ export default function SocketsProvider(props: any) {
                 socket,
                 nickname,
                 roomName,
-                rooms,
-                roomId,
                 joinedRoom,
                 setJoinedRoom,
+                roomsObject,
+                namesObject,
                 setNickname,
+                roomsExist,
                 setRoomName,
-                messages, 
+                messages,
                 setMessages,
                 isTyping: isTyping,
             }} {...props} />

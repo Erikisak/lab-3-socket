@@ -8,12 +8,12 @@ export default function Chat() {
   const { socket, messages, roomName, nickname, setMessages, isTyping } = useSockets()
   const [newMessage, setNewMessage] = useState('')
 
-
   //recieve messages from from all.
   socket.on('message', incomingMessage => {
     outPutMessage(incomingMessage)
   })
-  //get roomname and users
+
+  //get roomname and users for VG
   //socket.on('roomUsers', ({ room, users }) => {
   //  console.log(room, users)
   //})
@@ -26,13 +26,15 @@ export default function Chat() {
         message: incomingMessage.text,
         time: incomingMessage.time
       },
-    ]);
+    ])
+    const chatBox = document.getElementById('chatBox')
+    if (chatBox) {
+      chatBox.scrollIntoView({ behavior: "smooth", block: "end" });
+    };
   }
 
-  const handleTyping = (e: any) => {
-    socket.emit('isTyping',);
-
-    console.log('isTyping')
+  const handleTyping = () => {
+    socket.emit('isTyping')
   }
 
   function handleSendMessage(e: FormEvent) {
@@ -44,76 +46,69 @@ export default function Chat() {
     }
 
     socket.emit('chatMessage', text)
-
     setNewMessage('')
   }
 
   return (
-
-      <Box>
-        <Sidebar/>
-        <Paper sx={paperStyle}>
-         
-            <Typography sx={header}>{roomName}</Typography>
-          
-          <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', paddingBottom: '10rem' }}>
-            {messages.map(({ message, username, time }, index) => {
-              return (
-                //conditional rendering checks if current user sent the message. Fix styling.
-                username === nickname ?
-                  <Paper sx={ownMessage} key={index}>
-                    <Typography sx={usernameStyle}>You</Typography>
-                    <Typography sx={messageStyle}>{message}</Typography>
-                    <Typography sx={timeStyle}>{time}</Typography>
-                  </Paper>
-                  :
-                  <Box sx={othersMessage} key={index}>
-                  <Paper >
-                    <Typography sx={usernameStyle}>{username}</Typography>
-                    <Typography sx={messageStyle}>{message}</Typography>
-                    <Typography sx={timeStyle}>{time}</Typography>
-                  </Paper>
-                  
-                 </Box>
-               
-              )
-            })}
-            <Typography sx={istypingText} >{isTyping}</Typography>
-          </Box>
-          <Box >
-            <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
-              <TextField
-                sx={textfieldStyle}
-                multiline
-                required
-                rows={3}
-                placeholder="Type your message"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={handleTyping} />
-  
-              <Button sx={button} type="submit">send</Button>
-            </Paper>
-          </Box>
-        </Paper>
-      </Box>
+    <Box id='chatBox'>
+      <Sidebar />
+      <Paper sx={paperStyle}>
+        <Typography sx={header}>{roomName}</Typography>
+        <Box sx={boxStyle}>
+          {messages.map(({ message, username, time }, index) => {
+            return (
+              //conditional rendering checks if current user sent the message.
+              username === nickname ?
+                <Paper sx={ownMessage} key={index}>
+                  <Typography sx={usernameStyle}>You</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+                :
+                <Paper sx={othersMessage} key={index}>
+                  <Typography sx={usernameStyle}>{username}</Typography>
+                  <Typography sx={messageStyle}>{message}</Typography>
+                  <Typography sx={timeStyle}>{time}</Typography>
+                </Paper>
+            )
+          })}
+          <Typography sx={istypingText} >{isTyping}</Typography>
+        </Box>
+        <Box >
+          <Paper sx={messageBox} component='form' elevation={5} onSubmit={handleSendMessage}>
+            <TextField
+              sx={textfieldStyle}
+              multiline
+              required
+              rows={3}
+              placeholder="Type your message"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={handleTyping} />
+            <Button sx={button} type="submit">send</Button>
+          </Paper>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 
+const boxStyle: SxProps = {
+  display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  paddingBottom: '10rem'
+}
 const messageStyle: SxProps = {
   padding: '0.3rem 0.5rem',
 }
-// const istypingText: SxProps = {
-// position: 'absolute'
-// }
 const istypingText: SxProps = {
   marginTop: '2rem'
 }
-
 const usernameStyle: SxProps = {
   padding: '0.3rem 0.5rem',
   backgroundColor: '#4D774E',
-  color: 'white', 
+  color: 'white',
 }
 const timeStyle: SxProps = {
   paddingBottom: '0.3rem',
@@ -124,12 +119,6 @@ const timeStyle: SxProps = {
 const textfieldStyle: SxProps = {
   backgroundColor: 'white',
   width: '70%',
-}
-const roomname: SxProps = {
-  textAlign: 'center',
-  fontSize: '2rem',
-  paddingTop: '2rem'
-
 }
 const messageBox: SxProps = {
   position: 'fixed',
@@ -145,18 +134,18 @@ const messageBox: SxProps = {
 }
 const paperStyle: SxProps = {
   backgroundColor: '#E5F6DF',
-
-  minHeight: '40rem',
   height: '100%',
+  minHeight: '100vh',
   width: '100%',
   maxWidth: '60rem',
   marginLeft: 'auto',
   marginRight: 'auto'
 }
 const header: SxProps = {
+  paddingTop: '2rem',
+  wordWrap: 'break-word',
   textAlign: 'center',
   fontSize: '2.5rem',
-  marginTop: '5rem'
 }
 const button: SxProps = {
   color: '#fff',
@@ -180,14 +169,4 @@ const othersMessage: SxProps = {
   marginLeft: 'auto',
   marginRight: '1rem',
 
-}
-const chatBubble: SxProps = {
-  backgroundColor: 'white',
-  width: '10rem',
-  height: '5rem',
-  paddingTop: '.5rem',
-  paddingLeft: '.5rem',
-  marginLeft: '1rem',
-  marginTop: '2rem',
-  marginBottom: '2rem'
 }

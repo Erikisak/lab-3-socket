@@ -1,6 +1,6 @@
 import { SxProps, Typography, TextField, Box, Button, Drawer, IconButton } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { styled, } from "@mui/system";
 import CloseIcon from '@mui/icons-material/Close';
 import { useSockets } from "../context/socket.context";
@@ -8,55 +8,68 @@ import '../style.css'
 
 
 export default function CreateRoom() {
-  const { socket, nickname, setJoinedRoom, roomName, setRoomName } = useSockets();
+  const { socket, nickname, setJoinedRoom, roomName, setRoomName, roomsObject } = useSockets();
 
-  const [openDelete, setOpenDelete] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const handleDeleteDrawerOpen = () => {
-    setOpenDelete(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
-  const handleDeleteDrawerClose = () => {
-    setOpenDelete(false);
+  const handleDrawerClose = () => {
+    setOpen(false);
   };
 
-  function handleCreateRoom() {
-    if (!String(roomName).trim()) return;
+  function handleCreateRoom(e: FormEvent) {
+    e.preventDefault()
+    let doubleCheck = Object.keys(roomsObject).filter((key) => key === roomName)
 
-    //Join chatroom, send username and room to server, on submit in createRoom component || FUNKAR
-    socket.emit('joinRoom', { nickname, roomName });
-    setJoinedRoom(true)
+    if (!String(roomName).trim()) {
+      alert('The name of a room can not be blank')
+      return;
+    } else if (doubleCheck.length > 0) {
+      alert('This name is taken')
+      return;
+    }
+    else {
+      const createRoom = true
+
+      //join chatroom, send username and room to server || FUNKAR
+      socket.emit('joinRoom', { nickname, roomName, createRoom });
+      setJoinedRoom(true)
+    }
   }
 
   return (
-
-    <Box >
-      <Typography sx={header}>
-        CREATE ROOM
+    <Box sx={middle}>
+      <Typography sx={welcome}>
+        {nickname}, welcome to Chat App!
       </Typography>
-      <Box textAlign={'center'}>
-        <Button
-          onClick={handleDeleteDrawerOpen}
-          style={{ backgroundColor: 'transparent' }}>
+      <Box sx={createRoomStyle}>
+        <Typography sx={header}>
+          CREATE ROOM
+        </Typography>
+        <Button onClick={handleDrawerOpen}>
           <AddCircleIcon sx={icon} />
         </Button>
       </Box>
       <Drawer
+        PaperProps={{ sx: { width: 'max-content', padding: '1rem', margin: '0 auto' } }}
         sx={drawerStyle}
-        variant="persistent"
-        anchor="right"
-        open={openDelete}>
+        variant="temporary"
+        anchor="top"
+        open={open}>
         <DrawerHeader >
-          <IconButton onClick={handleDeleteDrawerClose}>
+          <IconButton onClick={handleDrawerClose}>
             <CloseIcon sx={iconStyle} />
           </IconButton>
         </DrawerHeader>
+        <Typography sx={drawerText2}>
+          Your room name
+        </Typography>
         <Box component='form' onSubmit={handleCreateRoom}>
-          <Typography sx={drawerText2}>
-            Room name
-          </Typography>
           <TextField
             autoComplete="off"
-            inputProps={{ minLength: 3 }}
+            inputProps={{ minLength: 3, maxLength: 20 }}
             className="inputRounded"
             value={roomName}
             sx={textfield}
@@ -74,8 +87,6 @@ export default function CreateRoom() {
             </Button>
           </Box>
         </Box>
-        <Box>
-        </Box>
       </Drawer>
     </Box>
   );
@@ -87,18 +98,37 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1),
   justifyContent: 'flex-start',
 }));
+const middle: SxProps = {
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+  width: '100%',
+  height: '100vh',
+}
+const createRoomStyle: SxProps = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  width: '100%',
+  height: '100vh',
+}
 const header: SxProps = {
   color: '#4D774E',
   textAlign: 'center',
   fontSize: '2.5rem',
-  marginTop: '5rem',
+}
+const welcome: SxProps = {
+  color: '#4D774E',
+  position: 'absolute',
+  fontSize: '1.5rem',
+  paddingTop: '5rem',
 }
 const icon: SxProps = {
   color: '#4D774E',
   fontSize: '6rem',
-  marginTop: '5rem',
+  paddingTop: '1rem',
   '&:hover': {
-
     color: '#4caf50',
   },
 }
@@ -113,37 +143,24 @@ const button2: SxProps = {
 const iconStyle: SxProps = {
   fontSize: '2rem',
   color: 'black',
-  float: 'right'
 }
 const drawerText2: SxProps = {
   color: '#fff',
-  textAlign: 'center',
   fontSize: '1.5rem'
 }
 const drawerStyle: SxProps = {
-  position: 'absolute',
+  textAlign: 'center',
   flexShrink: 0,
   '& .MuiDrawer-paper': {
     marginTop: '10rem',
-    marginRight: { xs: '1.5rem', sm: '8rem', lg: '20rem' },
-    width: { xs: '90%', sm: '50%', md: '50%', lg: '50%' },
-    height: { xs: '50%', sm: '50%', md: '40%', lg: '40%' },
     backgroundColor: '#4D774E',
     borderRadius: '20px'
   }
 }
 const textfield: SxProps = {
-
-  marginTop: '4rem',
-  display: 'flex',
-  justifyContent: 'center',
-  width: '12rem',
-  marginLeft: 'auto',
-  marginRight: 'auto'
-
+  marginTop: '3rem',
+  width: '15rem',
 }
 const button: SxProps = {
-  display: 'flex',
-  justifyContent: 'center',
   marginTop: '2rem'
 }

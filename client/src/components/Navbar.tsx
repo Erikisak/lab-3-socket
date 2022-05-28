@@ -8,14 +8,14 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useSockets } from '../context/socket.context';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Sidebar from './Sidebar';
-import { SxProps } from '@mui/material';
 
 
 export default function Navbar() {
-  const { joinedRoom, setJoinedRoom, socket, setMessages } = useSockets();
+  const { joinedRoom, setRoomName, setJoinedRoom, socket, setMessages, nickname } = useSockets();
 
   function exitRoom() {
     socket.emit('leaveRoom')
+    setRoomName('')
     setJoinedRoom(false)
     setMessages([])
   }
@@ -41,7 +41,7 @@ export default function Navbar() {
             Chat App
           </Typography>
           <Box >
-          <Sidebar />
+            {nickname ? <Sidebar /> : null}
           </Box>
           {joinedRoom ?
             <IconButton

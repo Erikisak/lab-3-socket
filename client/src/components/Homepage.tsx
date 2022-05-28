@@ -1,24 +1,34 @@
-import { Paper, SxProps, Typography, TextField, Box, Button, Grid } from "@mui/material";
+import { Paper, SxProps, Typography, TextField, Button, Grid } from "@mui/material";
 import { FormEvent, useState } from "react";
 import { useSockets } from "../context/socket.context";
 import '../style.css'
 
 export default function Homepage() {
     const [inputValue, setinputValue] = useState('')
-    const { socket, nickname, setNickname } = useSockets()
+    const { socket, setNickname, namesObject } = useSockets()
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault()
-        //save nickname
-        setNickname(inputValue)
-        localStorage.setItem('nickname', inputValue)
+        //save nickname if it doesnt already exist
+        let doubleCheck = Object.keys(namesObject).filter((key) => key === inputValue)
+
+        if (!String(inputValue).trim()) {
+            alert('Your nickname can not be blank')
+            return;
+        } else if (doubleCheck.length > 0) {
+            alert('This name is taken')
+            return;
+        }
+        else {
+            setNickname(inputValue)
+            socket.emit('nameSubmit', inputValue)
+        }
     }
 
     return (
         <Grid>
             <Paper
                 component='form'
-                /* variant="outlined" */
                 elevation={10}
                 sx={paper}
                 onSubmit={handleSubmit}>
@@ -32,7 +42,7 @@ export default function Homepage() {
                     className="inputRounded"
                     value={inputValue}
                     sx={textfield}
-                    inputProps={{minLength: 3}}
+                    inputProps={{ minLength: 3 }}
                     id="outlined-basic"
                     label="Nickname"
                     variant="outlined"
@@ -47,7 +57,6 @@ export default function Homepage() {
         </Grid>
     );
 }
-
 
 const paper: SxProps = {
     background: '',

@@ -1,6 +1,5 @@
 import Homepage from "./Homepage";
 import Rooms from "./Rooms";
-import Chat from "./Chat";
 import Navbar from "./Navbar";
 import { Box } from "@mui/material";
 import { useSockets } from "../context/socket.context"
