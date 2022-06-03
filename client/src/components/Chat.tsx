@@ -84,7 +84,12 @@ export default function Chat() {
               placeholder="Type your message"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={handleTyping} />
+              onKeyDown={(e) => {
+                handleTyping()
+                if(e.key === 'Enter'){
+                  handleSendMessage(e)
+                } 
+                }} />
             <Button sx={button} type="submit">send</Button>
           </Paper>
         </Box>
@@ -149,7 +154,11 @@ const header: SxProps = {
 }
 const button: SxProps = {
   color: '#fff',
-  background: '#4D774E '
+  background: '#4D774E ',
+  '&:hover': {
+    backgroundColor: '#4caf50',
+    color: '#fff',
+  },
 }
 const ownMessage: SxProps = {
   minWidth: '6rem',
